@@ -195,7 +195,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   }
 
   // Java download guidance page: point users to the HMCLDL release notes.
-  LPCWSTR downloadLink = L"https://github.com/cubestudio-dev/HMCLDL/releases/tag/v1.1";
+  LPCWSTR downloadLink = L"https://github.com/cubestudio-dev/HMCLDL/releases/tag/v1.2.0";
 
   if (IDOK == MessageBox(NULL, useChinese ? ERROR_PROMPT_ZH : ERROR_PROMPT, useChinese ? ERROR_TITLE_ZH : ERROR_TITLE, MB_ICONWARNING | MB_OKCANCEL)) {
     ShellExecute(0, 0, downloadLink, 0, 0, SW_SHOW);
