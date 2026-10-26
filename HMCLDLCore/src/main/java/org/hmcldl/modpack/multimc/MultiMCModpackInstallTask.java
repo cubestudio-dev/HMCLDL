@@ -346,8 +346,8 @@ public final class MultiMCModpackInstallTask extends Task<MultiMCInstancePatch.R
 
             try (InputStream input = Objects.requireNonNull(
                     MultiMCModpackInstallTask.class.getResourceAsStream(
-                            "/assets/game/HMCLMultiMCBootstrap-1.0.jar"),
-                    "Bundled HMCLMultiMCBootstrap is missing.")) {
+                            "/assets/game/HMCLDLMultiMCBootstrap-1.0.jar"),
+                    "Bundled HMCLDLMultiMCBootstrap is missing.")) {
                 Path libraryPath = repository.getLayout().getLibraryFile(artifact.getManifest().id(), MultiMCInstancePatch.BOOTSTRAP_LIBRARY);
 
                 Files.createDirectories(libraryPath.getParent());

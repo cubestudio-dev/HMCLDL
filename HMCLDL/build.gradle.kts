@@ -110,7 +110,7 @@ tasks.compileJava {
     options.compilerArgs.addAll(addOpens.map { "--add-exports=$it=ALL-UNNAMED" })
 }
 
-val hmclProperties = buildList {
+val hmcldlProperties = buildList {
     add("hmcldl.version" to project.version.toString())
     add("hmcldl.add-opens" to addOpens.joinToString(" "))
     System.getenv("GITHUB_SHA")?.let {
@@ -119,16 +119,16 @@ val hmclProperties = buildList {
     add("hmcldl.version.type" to versionType)
 }
 
-val hmclPropertiesFile = layout.buildDirectory.file("hmcl.properties")
+val hmcldlPropertiesFile = layout.buildDirectory.file("hmcldl.properties")
 val createPropertiesFile = tasks.register("createPropertiesFile") {
-    outputs.file(hmclPropertiesFile)
-    hmclProperties.forEach { (k, v) -> inputs.property(k, v) }
+    outputs.file(hmcldlPropertiesFile)
+    hmcldlProperties.forEach { (k, v) -> inputs.property(k, v) }
 
     doLast {
-        val targetFile = hmclPropertiesFile.get().asFile
+        val targetFile = hmcldlPropertiesFile.get().asFile
         targetFile.parentFile.mkdir()
         targetFile.bufferedWriter().use {
-            for ((k, v) in hmclProperties) {
+            for ((k, v) in hmcldlProperties) {
                 it.write("$k=$v\n")
             }
         }
@@ -189,7 +189,7 @@ tasks.processResources {
     dependsOn(createLanguageList)
 
     into("assets/") {
-        from(hmclPropertiesFile)
+        from(hmcldlPropertiesFile)
         from(embedResources)
     }
 
@@ -330,17 +330,17 @@ tasks.register<JavaExec>("run") {
 
     jvmArgs(vmOptions)
 
-    val hmclJavaHome = System.getenv("HMCLDL_JAVA_HOME")
-    if (hmclJavaHome != null) {
+    val hmcldlJavaHome = System.getenv("HMCLDL_JAVA_HOME")
+    if (hmcldlJavaHome != null) {
         this.executable(
-            file(hmclJavaHome).resolve("bin")
+            file(hmcldlJavaHome).resolve("bin")
                 .resolve(if (System.getProperty("os.name").lowercase().startsWith("windows")) "java.exe" else "java")
         )
     }
 
     doFirst {
         logger.quiet("HMCLDL_JAVA_OPTS: {}", vmOptions)
-        logger.quiet("HMCLDL_JAVA_HOME: {}", hmclJavaHome ?: System.getProperty("java.home"))
+        logger.quiet("HMCLDL_JAVA_HOME: {}", hmcldlJavaHome ?: System.getProperty("java.home"))
     }
 }
 

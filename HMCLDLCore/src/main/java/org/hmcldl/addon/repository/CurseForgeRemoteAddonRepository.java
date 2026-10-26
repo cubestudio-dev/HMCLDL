@@ -58,7 +58,7 @@ public final class CurseForgeRemoteAddonRepository implements RemoteAddonReposit
     private static final Semaphore SEMAPHORE = new Semaphore(16);
     private static final int DEFAULT_RETRY_COUNT = 3;
 
-    public static final String API_KEY = System.getProperty("hmcl.curseforge.apikey", JarUtils.getAttribute("hmcl.curseforge.apikey", ""));
+    public static final String API_KEY = System.getProperty("hmcldl.curseforge.apikey", JarUtils.getAttribute("hmcldl.curseforge.apikey", ""));
 
     private static <R extends HttpRequest> R withApiKey(R request) {
         if (request.getUrl().startsWith(PREFIX) && !API_KEY.isEmpty()) {
@@ -243,7 +243,7 @@ public final class CurseForgeRemoteAddonRepository implements RemoteAddonReposit
     @Override
     public Optional<RemoteAddon.Version> getRemoteVersionByLocalFile(Path file) throws IOException {
         long hash = calculateFingerprint(file);
-        if (hash == 811513880) { // Workaround for https://github.com/HMCL-dev/HMCL/issues/4597
+        if (hash == 811513880) { // Workaround for
             return Optional.empty();
         }
 

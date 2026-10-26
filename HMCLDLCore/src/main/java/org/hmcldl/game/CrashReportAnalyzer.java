@@ -101,20 +101,17 @@ public final class CrashReportAnalyzer {
         BLOCK("Block: (?<type>.*)[\\w\\W\\n\\r]*?Block location: (?<location>.*)", "type", "location"),
         // Cannot find native libraries
         UNSATISFIED_LINK_ERROR("java\\.lang\\.UnsatisfiedLinkError: Failed to locate library: (?<name>.*)", "name"),
-
-        //https://github.com/HMCL-dev/HMCL/pull/1813
         OPTIFINE_IS_NOT_COMPATIBLE_WITH_FORGE("(java\\.lang\\.NoSuchMethodError: 'java\\.lang\\.Class sun\\.misc\\.Unsafe\\.defineAnonymousClass\\(java\\.lang\\.Class, byte\\[\\], java\\.lang\\.Object\\[\\]\\)'|java\\.lang\\.NoSuchMethodError: 'void net\\.minecraft\\.client\\.renderer\\.texture\\.SpriteContents\\.\\<init\\>\\(net\\.minecraft\\.resources\\.ResourceLocation, |java\\.lang\\.NoSuchMethodError: 'void net\\.minecraftforge\\.client\\.gui\\.overlay\\.ForgeGui\\.renderSelectedItemName\\(net\\.minecraft\\.client\\.gui\\.GuiGraphics, int\\)'|java\\.lang\\.NoSuchMethodError: 'java\\.lang\\.String com\\.mojang\\.blaze3d\\.systems\\.RenderSystem\\.getBackendDescription\\(\\)'|java\\.lang\\.NoSuchMethodError: 'net\\.minecraft\\.network\\.chat\\.FormattedText net\\.minecraft\\.client\\.gui\\.Font\\.ellipsize\\(net\\.minecraft\\.network\\.chat\\.FormattedText, int\\)'|java\\.lang\\.NoSuchMethodError: 'void net\\.minecraft\\.server\\.level\\.DistanceManager\\.(.*?)\\(net\\.minecraft\\.server\\.level\\.TicketType, net\\.minecraft\\.world\\.level\\.ChunkPos, int, java\\.lang\\.Object, boolean\\)'|java\\.lang\\.NoSuchMethodError: 'void net\\.minecraft\\.client\\.renderer\\.block\\.model\\.BakedQuad\\.\\<init\\>\\(int\\[\\], int, net\\.minecraft\\.core\\.Direction, net\\.minecraft\\.client\\.renderer\\.texture\\.TextureAtlasSprite, boolean, boolean\\)'|TRANSFORMER/net\\.optifine/net\\.optifine\\.reflect\\.Reflector\\.\\<clinit\\>\\(Reflector\\.java)"),
         MOD_FILES_ARE_DECOMPRESSED("(The directories below appear to be extracted jar files\\. Fix this before you continue|Extracted mod jars found, loading will NOT continue)"),//Mod文件被解压
         OPTIFINE_CAUSES_THE_WORLD_TO_FAIL_TO_LOAD("java\\.lang\\.NoSuchMethodError: net\\.minecraft\\.world\\.server\\.ChunkManager$ProxyTicketManager\\.shouldForceTicks\\(J\\)Z"),//OptiFine导致无法加载世界 https://www.minecraftforum.net/forums/support/java-edition-support/3051132-exception-ticking-world
         TOO_MANY_MODS_LEAD_TO_EXCEEDING_THE_ID_LIMIT("maximum id range exceeded"),//Mod过多导致超出ID限制
 
         // Mod issues
-        //https://github.com/HMCL-dev/HMCL/pull/2038
         MODMIXIN_FAILURE("(MixinApplyError|Mixin prepare failed |Mixin apply failed |mixin\\.injection\\.throwables\\.|\\.mixins\\.json\\] FAILED during \\))"),//ModMixin失败
         MIXIN_APPLY_MOD_FAILED("Mixin apply for mod (?<id>.*) failed", "id"),//Mixin应用失败
         FORGE_ERROR("An exception was thrown, the game will display an error screen and halt\\.\\R*(?<reason>.*\\R*(\\s*at .*\\R)+)", "reason"),//Forge报错,Forge可能已经提供了错误信息
         MOD_RESOLUTION0("(\tMod File:|-- MOD |\tFailure message:)"),
-        FORGE_REPEAT_INSTALLATION("MultipleArgumentsForOptionException: Found multiple arguments for option (.*?), but you asked for only one"),//https://github.com/HMCL-dev/HMCL/issues/1880
+        FORGE_REPEAT_INSTALLATION("MultipleArgumentsForOptionException: Found multiple arguments for option (.*?), but you asked for only one"),
         OPTIFINE_REPEAT_INSTALLATION("ResolutionException: Module optifine reads another module named optifine"),//Optifine 重复安装（及Mod文件夹有，自动安装也有）
         JAVA_VERSION_IS_TOO_HIGH("(Unable to make protected final java\\.lang\\.Class java\\.lang\\.ClassLoader\\.defineClass|java\\.lang\\.NoSuchFieldException: ucp|Unsupported class file major version|because module java\\.base does not export|java\\.lang\\.ClassNotFoundException: jdk\\.nashorn\\.api\\.scripting\\.NashornScriptEngineFactory|java\\.lang\\.ClassNotFoundException: java\\.lang\\.invoke\\.LambdaMetafactory|Exception in thread \"main\" java\\.lang\\.NullPointerException: Cannot read the array length because \"urls\" is null)"),//Java版本过高
         INSTALL_MIXINBOOTSTRAP("java\\.lang\\.ClassNotFoundException: org\\.spongepowered\\.asm\\.launch\\.MixinTweaker"),
@@ -210,7 +207,7 @@ public final class CrashReportAnalyzer {
             "mods", "mod", "impl", "org", "com", "cn", "cc", "jp", // title
             "core", "config", "registries", "lib", "ruby", "mc", "codec", "recipe", "channel", "embedded", "done", "net", "netty", "network", "load", "github", "handler", "content", "feature", // misc
             "file", "machine", "shader", "general", "helper", "init", "library", "api", "integration", "engine", "preload", "preinit",
-            "hellominecraft", "jackhuang", // hmcl
+            "hmcldl", // launcher
             "fml", "minecraftforge", "forge", "cpw", "modlauncher", "launchwrapper", "objectweb", "asm", "event", "eventhandler", "handshake", "modapi", "kcauldron", // forge
             "fabricmc", "loader", "game", "knot", "launch", "mixin" // fabric
     ));

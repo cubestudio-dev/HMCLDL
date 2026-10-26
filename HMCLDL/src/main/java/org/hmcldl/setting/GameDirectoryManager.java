@@ -22,9 +22,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.hmcldl.Metadata;
-import org.hmcldl.game.HMCLGameInstance;
-import org.hmcldl.game.HMCLGameRepository;
-import org.hmcldl.game.HMCLGameRepositorySnapshot;
+import org.hmcldl.game.HMCLDLGameInstance;
+import org.hmcldl.game.HMCLDLGameRepository;
+import org.hmcldl.game.HMCLDLGameRepositorySnapshot;
 import org.hmcldl.util.PortablePath;
 import org.hmcldl.util.i18n.I18n;
 import org.hmcldl.util.i18n.LocalizedText;
@@ -131,24 +131,24 @@ public final class GameDirectoryManager {
             FXCollections.unmodifiableObservableList(mergedGameDirectories);
 
     /// Runtime repositories keyed by game directory object identity.
-    private static final Map<GameDirectory, HMCLGameRepository> repositories = new IdentityHashMap<>();
+    private static final Map<GameDirectory, HMCLDLGameRepository> repositories = new IdentityHashMap<>();
 
     /// The selected game directory, or `null` before the fallback game directory is resolved.
     private static final ObjectProperty<@UnknownNullability GameDirectory> selectedGameDirectory = new SimpleObjectProperty<>(GameDirectoryManager.class, "selectedGameDirectory");
 
     /// The selected game repository, or `null` before the fallback game directory is resolved.
-    private static final ObjectProperty<@UnknownNullability HMCLGameRepository> selectedRepository = new SimpleObjectProperty<>(GameDirectoryManager.class, "selectedRepository");
+    private static final ObjectProperty<@UnknownNullability HMCLDLGameRepository> selectedRepository = new SimpleObjectProperty<>(GameDirectoryManager.class, "selectedRepository");
 
     /// The selected instance projected from the selected repository's current snapshot.
-    private static final ReadOnlyObjectWrapper<@Nullable HMCLGameInstance> selectedInstance =
+    private static final ReadOnlyObjectWrapper<@Nullable HMCLDLGameInstance> selectedInstance =
             new ReadOnlyObjectWrapper<>(GameDirectoryManager.class, "selectedInstance");
 
     /// Updates [#selectedInstance] when the selected repository changes its selected instance.
-    private static final ChangeListener<@Nullable HMCLGameInstance> selectedRepositoryInstanceListener =
+    private static final ChangeListener<@Nullable HMCLDLGameInstance> selectedRepositoryInstanceListener =
             (observable, oldValue, newValue) -> selectedInstance.set(newValue);
 
     /// Reacts when the selected repository publishes a new snapshot.
-    private static final ChangeListener<? super HMCLGameRepositorySnapshot> selectedRepositorySnapshotListener =
+    private static final ChangeListener<? super HMCLDLGameRepositorySnapshot> selectedRepositorySnapshotListener =
             (observable, oldValue, newValue) -> onSelectedRepositorySnapshotChanged();
 
     /// Initializes game directory state from the stores loaded by [SettingsManager].
@@ -202,12 +202,12 @@ public final class GameDirectoryManager {
             }
 
             settings().selectedGameDirectoryProperty().set(newValue.getId());
-            @Nullable HMCLGameRepository oldRepository = selectedRepository.get();
+            @Nullable HMCLDLGameRepository oldRepository = selectedRepository.get();
             if (oldRepository != null) {
                 oldRepository.selectedInstanceProperty().removeListener(selectedRepositoryInstanceListener);
                 oldRepository.snapshotProperty().removeListener(selectedRepositorySnapshotListener);
             }
-            HMCLGameRepository repository = getOrCreateRepository(newValue);
+            HMCLDLGameRepository repository = getOrCreateRepository(newValue);
             selectedRepository.set(repository);
             selectedInstance.set(repository.getSelectedInstance());
             repository.selectedInstanceProperty().addListener(selectedRepositoryInstanceListener);
@@ -222,13 +222,13 @@ public final class GameDirectoryManager {
 
     /// Restores selection and notifies consumers after the selected repository publishes a loaded snapshot.
     private static void onSelectedRepositorySnapshotChanged() {
-        @Nullable HMCLGameRepository repository = selectedRepository.get();
+        @Nullable HMCLDLGameRepository repository = selectedRepository.get();
         if (repository == null || !repository.isLoaded()) {
             return;
         }
 
         repository.refreshSelectedInstance();
-        for (Consumer<HMCLGameRepository> listener : versionsListeners) {
+        for (Consumer<HMCLDLGameRepository> listener : versionsListeners) {
             listener.accept(repository);
         }
     }
@@ -273,9 +273,9 @@ public final class GameDirectoryManager {
     }
 
     /// Returns the repository for the given game directory, creating it when needed.
-    private static HMCLGameRepository getOrCreateRepository(GameDirectory gameDirectory) {
+    private static HMCLDLGameRepository getOrCreateRepository(GameDirectory gameDirectory) {
         Objects.requireNonNull(gameDirectory);
-        return repositories.computeIfAbsent(gameDirectory, HMCLGameRepository::new);
+        return repositories.computeIfAbsent(gameDirectory, HMCLDLGameRepository::new);
     }
 
     /// Adds a game directory to the per-workspace store.
@@ -458,8 +458,8 @@ public final class GameDirectoryManager {
     }
 
     /// Returns the selected game repository.
-    public static HMCLGameRepository getSelectedRepository() {
-        HMCLGameRepository repository = selectedRepository.get();
+    public static HMCLDLGameRepository getSelectedRepository() {
+        HMCLDLGameRepository repository = selectedRepository.get();
         if (repository == null) {
             throw new IllegalStateException("Selected repository cannot be null");
         }
@@ -485,7 +485,7 @@ public final class GameDirectoryManager {
     }
 
     /// Returns the selected game repository property.
-    public static ObjectProperty<HMCLGameRepository> selectedRepositoryProperty() {
+    public static ObjectProperty<HMCLDLGameRepository> selectedRepositoryProperty() {
         return selectedRepository;
     }
 
@@ -494,14 +494,14 @@ public final class GameDirectoryManager {
     /// The value is `null` when the selected repository has no registered selected instance.
     ///
     /// @return the read-only selected-instance property
-    public static ReadOnlyObjectProperty<@Nullable HMCLGameInstance> selectedInstanceProperty() {
+    public static ReadOnlyObjectProperty<@Nullable HMCLDLGameInstance> selectedInstanceProperty() {
         return selectedInstance.getReadOnlyProperty();
     }
 
     /// Returns the selected instance from the selected repository's current snapshot.
     ///
     /// @return the selected instance, or `null` when none is registered
-    public static @Nullable HMCLGameInstance getSelectedInstance() {
+    public static @Nullable HMCLDLGameInstance getSelectedInstance() {
         return getSelectedRepository().getSelectedInstance();
     }
 
@@ -509,16 +509,16 @@ public final class GameDirectoryManager {
     ///
     /// @param instance the instance to select, or `null` to clear the selection
     /// @throws IllegalArgumentException if `instance` belongs to another repository
-    public static void setSelectedInstance(@Nullable HMCLGameInstance instance) {
+    public static void setSelectedInstance(@Nullable HMCLDLGameInstance instance) {
         getSelectedRepository().setSelectedInstance(instance);
     }
 
     /// Listeners notified after the selected repository has loaded versions.
-    private static final List<Consumer<HMCLGameRepository>> versionsListeners = new ArrayList<>(4);
+    private static final List<Consumer<HMCLDLGameRepository>> versionsListeners = new ArrayList<>(4);
 
     /// Registers a listener that is notified when the selected repository's versions are available.
-    public static void registerVersionsListener(Consumer<HMCLGameRepository> listener) {
-        HMCLGameRepository repository = getSelectedRepository();
+    public static void registerVersionsListener(Consumer<HMCLDLGameRepository> listener) {
+        HMCLDLGameRepository repository = getSelectedRepository();
         if (repository.isLoaded())
             listener.accept(repository);
         versionsListeners.add(listener);

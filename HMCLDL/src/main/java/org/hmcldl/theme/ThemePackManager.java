@@ -71,18 +71,18 @@ import static org.hmcldl.util.logging.Logger.LOG;
 @NotNullByDefault
 public final class ThemePackManager {
     /// Directory where imported theme packs are stored for the launcher UI.
-    public static final Path THEME_PACKS_DIRECTORY = Metadata.HMCL_LOCAL_HOME.resolve("themes");
+    public static final Path THEME_PACKS_DIRECTORY = Metadata.HMCLDL_LOCAL_HOME.resolve("themes");
 
     /// Directory where user-wide theme packs are discovered.
-    private static final Path USER_THEME_PACKS_DIRECTORY = Metadata.HMCL_USER_HOME.resolve("themes");
+    private static final Path USER_THEME_PACKS_DIRECTORY = Metadata.HMCLDL_USER_HOME.resolve("themes");
 
     /// Default version used when exporting the current launcher appearance.
     public static final String CURRENT_THEME_PACK_VERSION = "1.0.0";
 
     /// IDs of launcher-bundled theme packs in display order.
     private static final @Unmodifiable List<String> BUILTIN_THEME_PACK_IDS = List.of(
-            "hmcl.default",
-            "hmcl.classic"
+            "hmcldl.default",
+            "hmcldl.classic"
     );
 
     /// Built-in default theme reference.
@@ -1515,7 +1515,7 @@ public final class ThemePackManager {
             }
         }
 
-        Path temporaryFile = Files.createTempFile("hmcl-theme-background-", ".tmp");
+        Path temporaryFile = Files.createTempFile("hmcldl-theme-background-", ".tmp");
         boolean success = false;
         try {
             downloadNetworkBackground(uri, temporaryFile);

@@ -295,7 +295,7 @@ public final class ForgeNewModMetadata {
             throw new IOException("Missing embedded mods");
         }
 
-        Path tempFile = Files.createTempFile("hmcl-", ".zip");
+        Path tempFile = Files.createTempFile("hmcldl-", ".zip");
         try {
             for (ZipArchiveEntry embeddedModFile : embeddedModFiles) {
                 tree.extractTo(embeddedModFile, tempFile);
@@ -318,7 +318,7 @@ public final class ForgeNewModMetadata {
             if (tomlArray != null) {
                 dependencies = tomlArray.toList().stream().map( o -> ((TomlTable) o).toMap()).toList();
             }
-        } catch (ClassCastException ignored) { // https://github.com/HMCL-dev/HMCL/issues/5068
+        } catch (ClassCastException ignored) {
         }
 
         if (dependencies == null) {

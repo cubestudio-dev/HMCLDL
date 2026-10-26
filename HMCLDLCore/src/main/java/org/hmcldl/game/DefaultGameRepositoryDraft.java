@@ -475,7 +475,7 @@ public final class DefaultGameRepositoryDraft implements GameRepositoryDraft {
         Path parent = baseSnapshot.getLayout().getBaseDirectory()
                 .toAbsolutePath()
                 .normalize()
-                .resolve(".hmcl")
+                .resolve(".hmcldl")
                 .resolve("repository-drafts");
         Files.createDirectories(parent);
         return Files.createTempDirectory(parent, "commit-");

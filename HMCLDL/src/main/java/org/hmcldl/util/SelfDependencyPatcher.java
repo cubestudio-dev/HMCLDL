@@ -86,7 +86,7 @@ public final class SelfDependencyPatcher {
                     System.getProperty("os.name"), System.getProperty("os.arch")));
         }
 
-        final String customUrl = System.getProperty("hmcl.openjfx.repo");
+        final String customUrl = System.getProperty("hmcldl.openjfx.repo");
         if (customUrl == null) {
             if (System.getProperty("user.country", "").equalsIgnoreCase("CN")) {
                 defaultRepository = Repository.TENCENTCLOUD_MIRROR;

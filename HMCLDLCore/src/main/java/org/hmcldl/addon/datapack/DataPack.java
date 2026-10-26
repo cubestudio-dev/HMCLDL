@@ -124,7 +124,7 @@ public class DataPack {
                  FileSystem inputPackZipFS = CompressingUtils.createReadOnlyZipFileSystem(sourceDataPackPath)) {
                 Path resourcesZip = inputPackZipFS.getPath("resources.zip");
                 if (Files.isRegularFile(resourcesZip)) {
-                    Path tempResourcesFile = Files.createTempFile("hmcl", ".zip");
+                    Path tempResourcesFile = Files.createTempFile("hmcldl", ".zip");
                     try {
                         Files.copy(resourcesZip, tempResourcesFile, StandardCopyOption.REPLACE_EXISTING);
                         try (FileSystem resources = CompressingUtils.createReadOnlyZipFileSystem(tempResourcesFile)) {
@@ -139,7 +139,7 @@ public class DataPack {
                         {
                             "pack": {
                                 "pack_format": 4,
-                                "description": "Modified by HMCL."
+                                "description": "Modified by HMCLDL."
                             }
                         }
                         """;

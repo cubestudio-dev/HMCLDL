@@ -176,7 +176,7 @@ public interface WinTypes {
         }
     }
 
-    /// Minimal `PROPVARIANT` layout for values HMCL writes with [`IPropertyStore#SetValue`].
+    /// Minimal `PROPVARIANT` layout for values HMCLDL writes with [`IPropertyStore#SetValue`].
     ///
     /// Only `VT_EMPTY` and `VT_LPWSTR` construction is supported. The native layout is preserved:
     /// an 8-byte header followed by the value union, which is 8 bytes on x86
@@ -196,13 +196,13 @@ public interface WinTypes {
         /// The variant type tag, such as [`WinConstants#VT_EMPTY`] or [`WinConstants#VT_LPWSTR`].
         public short vt;
 
-        /// Reserved; must be zero for values constructed by HMCL.
+        /// Reserved; must be zero for values constructed by HMCLDL.
         public short wReserved1;
 
-        /// Reserved; must be zero for values constructed by HMCL.
+        /// Reserved; must be zero for values constructed by HMCLDL.
         public short wReserved2;
 
-        /// Reserved; must be zero for values constructed by HMCL.
+        /// Reserved; must be zero for values constructed by HMCLDL.
         public short wReserved3;
 
         /// Backing storage for the native value union.

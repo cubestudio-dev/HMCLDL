@@ -123,12 +123,12 @@ public enum OperatingSystem {
 
     static {
         String nativeEncoding = System.getProperty("native.encoding");
-        String hmclNativeEncoding = System.getProperty("hmcl.native.encoding");
+        String hmcldlNativeEncoding = System.getProperty("hmcldl.native.encoding");
         Charset nativeCharset = Charset.defaultCharset();
 
         try {
-            if (hmclNativeEncoding != null) {
-                nativeCharset = Charset.forName(hmclNativeEncoding);
+            if (hmcldlNativeEncoding != null) {
+                nativeCharset = Charset.forName(hmcldlNativeEncoding);
             } else {
                 if (nativeEncoding != null && !nativeEncoding.equalsIgnoreCase(nativeCharset.name())) {
                     nativeCharset = Charset.forName(nativeEncoding);

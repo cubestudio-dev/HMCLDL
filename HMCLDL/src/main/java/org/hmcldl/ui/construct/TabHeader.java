@@ -606,7 +606,7 @@ public class TabHeader extends Control implements TabControl, PageAware {
 
                 FXUtils.onClicked(this, () -> {
                     this.setOpacity(1);
-                    getSkinnable().getSelectionModel().select(tab);
+                    getSkinnable().select(tab);
                 });
             }
         }

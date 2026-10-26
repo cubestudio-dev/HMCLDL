@@ -171,7 +171,7 @@ public final class LaunchManifestNormalizer {
                 .findAny()
                 .ifPresent(optiFine -> {
                     String candidateArgument =
-                            "-Dhmcl.transformer.candidates=${library_directory}/" + optiFine.getPath();
+                            "-Dhmcldl.transformer.candidates=${library_directory}/" + optiFine.getPath();
                     List<Argument> jvmArguments = builder.getMutableJvmArguments();
                     if (jvmArguments.stream().noneMatch(argument -> candidateArgument.equals(argument.toString()))) {
                         jvmArguments.add(new StringArgument(candidateArgument));
@@ -247,9 +247,9 @@ public final class LaunchManifestNormalizer {
         return false;
     }
 
-    /// Removes the obsolete HMCL Log4j patch formerly prepended to affected manifests.
+    /// Removes the obsolete HMCLDL Log4j patch formerly prepended to affected manifests.
     ///
-    /// HMCL once injected `log4j-patch` to mitigate the Log4j vulnerability. The launcher now
+    /// HMCLDL once injected `log4j-patch` to mitigate the Log4j vulnerability. The launcher now
     /// rewrites `log4j2.xml` instead, so the leftover library entry is dropped.
     private static GameInstanceManifest removeLegacyLog4jPatch(GameInstanceManifest manifest) {
         List<Library> libraries = manifest.getLibraries();

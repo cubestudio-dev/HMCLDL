@@ -146,7 +146,7 @@ public class DownloadPage extends DecoratorAnimatedPage implements DecoratorPage
         }
 
         public void onGameSelected() {
-            HMCLGameRepository repository = org.hmcldl.setting.GameDirectoryManager.getSelectedRepository();
+            HMCLDLGameRepository repository = org.hmcldl.setting.GameDirectoryManager.getSelectedRepository();
             if (repository.isLoaded()) {
                 Controllers.getDecorator().startWizard(new VanillaInstallWizardProvider(repository, (GameRemoteVersion) settings.get("game")), i18n("install.new_game"));
             }
@@ -154,12 +154,12 @@ public class DownloadPage extends DecoratorAnimatedPage implements DecoratorPage
     }
 
     private static class VanillaInstallWizardProvider implements WizardProvider {
-        private final HMCLGameRepository repository;
-        private final HMCLDependencyManager dependencyManager;
+        private final HMCLDLGameRepository repository;
+        private final HMCLDLDependencyManager dependencyManager;
         private final DownloadProvider downloadProvider;
         private final GameRemoteVersion gameVersion;
 
-        public VanillaInstallWizardProvider(HMCLGameRepository repository, GameRemoteVersion gameVersion) {
+        public VanillaInstallWizardProvider(HMCLDLGameRepository repository, GameRemoteVersion gameVersion) {
             this.repository = repository;
             this.gameVersion = gameVersion;
             this.downloadProvider = DownloadProviders.getDownloadProvider();
@@ -181,7 +181,7 @@ public class DownloadPage extends DecoratorAnimatedPage implements DecoratorPage
                 throw new IllegalStateException("Instance ID is not set");
             }
 
-            try (HMCLGameBuilder builder = dependencyManager.newGameBuilder(instanceId)) {
+            try (HMCLDLGameBuilder builder = dependencyManager.newGameBuilder(instanceId)) {
                 builder.component(GameComponentType.GAME, ((ComponentRemoteVersion) settings.get(GameComponentType.GAME.getPatchId())).getGameVersion());
 
                 settings.asStringMap().forEach((key, value) -> {

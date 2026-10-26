@@ -20,7 +20,7 @@ package org.hmcldl.gradle.ci;
 /// @author Glavo
 public final class JenkinsUtils {
 
-    public static final boolean IS_ON_CI = "1".equals(System.getenv("HMCL_CI"));
+    public static final boolean IS_ON_CI = "1".equals(System.getenv("HMCLDL_CI"));
 
     private JenkinsUtils() {
     }

@@ -47,8 +47,8 @@ public final class EntryPoint {
         System.getProperties().putIfAbsent("javafx.autoproxy.disable", "true");
         System.getProperties().putIfAbsent("http.agent", "HMCLDL/" + Metadata.VERSION);
 
-        createHMCLDirectories();
-        LOG.start(Metadata.HMCL_LOCAL_HOME.resolve("logs"));
+        createHMCLDLDirectories();
+        LOG.start(Metadata.HMCLDL_LOCAL_HOME.resolve("logs"));
 
         checkWine();
 
@@ -72,30 +72,30 @@ public final class EntryPoint {
         System.exit(exitCode);
     }
 
-    private static void createHMCLDirectories() {
-        if (!Files.isDirectory(Metadata.HMCL_LOCAL_HOME)) {
+    private static void createHMCLDLDirectories() {
+        if (!Files.isDirectory(Metadata.HMCLDL_LOCAL_HOME)) {
             try {
-                Files.createDirectories(Metadata.HMCL_LOCAL_HOME);
+                Files.createDirectories(Metadata.HMCLDL_LOCAL_HOME);
                 if (OperatingSystem.CURRENT_OS == OperatingSystem.WINDOWS) {
                     try {
-                        Files.setAttribute(Metadata.HMCL_LOCAL_HOME, "dos:hidden", true);
+                        Files.setAttribute(Metadata.HMCLDL_LOCAL_HOME, "dos:hidden", true);
                     } catch (IOException e) {
-                        LOG.warning("Failed to set hidden attribute of " + Metadata.HMCL_LOCAL_HOME, e);
+                        LOG.warning("Failed to set hidden attribute of " + Metadata.HMCLDL_LOCAL_HOME, e);
                     }
                 }
             } catch (IOException e) {
                 // Logger has not been started yet, so print directly to System.err
-                System.err.println("Failed to create HMCL directory: " + Metadata.HMCL_LOCAL_HOME);
+                System.err.println("Failed to create HMCLDL directory: " + Metadata.HMCLDL_LOCAL_HOME);
                 e.printStackTrace(System.err);
-                showErrorAndExit(i18n("fatal.create_hmcl_current_directory_failure", Metadata.HMCL_LOCAL_HOME));
+                showErrorAndExit(i18n("fatal.create_hmcldl_current_directory_failure", Metadata.HMCLDL_LOCAL_HOME));
             }
         }
 
-        if (!Files.isDirectory(Metadata.HMCL_USER_HOME)) {
+        if (!Files.isDirectory(Metadata.HMCLDL_USER_HOME)) {
             try {
-                Files.createDirectories(Metadata.HMCL_USER_HOME);
+                Files.createDirectories(Metadata.HMCLDL_USER_HOME);
             } catch (IOException e) {
-                LOG.warning("Failed to create HMCL user home " + Metadata.HMCL_USER_HOME, e);
+                LOG.warning("Failed to create HMCLDL user home " + Metadata.HMCLDL_USER_HOME, e);
             }
         }
     }

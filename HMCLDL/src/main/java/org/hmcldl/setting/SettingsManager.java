@@ -56,19 +56,19 @@ public final class SettingsManager {
         }
     }
     /// The local directory storing per-workspace configuration files.
-    private static final Path LOCAL_CONFIG_FILES_DIRECTORY = Metadata.HMCL_LOCAL_HOME.resolve("config");
+    private static final Path LOCAL_CONFIG_FILES_DIRECTORY = Metadata.HMCLDL_LOCAL_HOME.resolve("config");
     /// The local directory storing per-workspace state files.
-    private static final Path LOCAL_STATE_DIRECTORY = Metadata.HMCL_LOCAL_HOME.resolve("state");
+    private static final Path LOCAL_STATE_DIRECTORY = Metadata.HMCLDL_LOCAL_HOME.resolve("state");
     /// The local directory storing per-workspace cache files.
-    private static final Path LOCAL_CACHE_DIRECTORY = Metadata.HMCL_LOCAL_HOME.resolve("cache");
+    private static final Path LOCAL_CACHE_DIRECTORY = Metadata.HMCLDL_LOCAL_HOME.resolve("cache");
     /// The local directory storing per-workspace private data files.
-    private static final Path LOCAL_PRIVATE_DIRECTORY = Metadata.HMCL_LOCAL_HOME.resolve("private");
+    private static final Path LOCAL_PRIVATE_DIRECTORY = Metadata.HMCLDL_LOCAL_HOME.resolve("private");
     /// The user directory storing shared configuration files.
-    private static final Path USER_CONFIG_FILES_DIRECTORY = Metadata.HMCL_USER_HOME.resolve("config");
+    private static final Path USER_CONFIG_FILES_DIRECTORY = Metadata.HMCLDL_USER_HOME.resolve("config");
     /// The user directory storing shared state files.
-    private static final Path USER_STATE_DIRECTORY = Metadata.HMCL_USER_HOME.resolve("state");
+    private static final Path USER_STATE_DIRECTORY = Metadata.HMCLDL_USER_HOME.resolve("state");
     /// The user directory storing shared private data files.
-    private static final Path USER_PRIVATE_DIRECTORY = Metadata.HMCL_USER_HOME.resolve("private");
+    private static final Path USER_PRIVATE_DIRECTORY = Metadata.HMCLDL_USER_HOME.resolve("private");
     /// The user settings path shared by all workspaces.
     public static final Path USER_SETTINGS_LOCATION =
             USER_CONFIG_FILES_DIRECTORY.resolve("user-settings.json");
@@ -194,7 +194,7 @@ public final class SettingsManager {
     }
     /// Returns the current per-workspace config directory path.
     public static Path localConfigDirectory() {
-        return Metadata.HMCL_LOCAL_HOME;
+        return Metadata.HMCLDL_LOCAL_HOME;
     }
     /// Returns the current per-workspace settings path.
     public static Path settingsLocation() {
@@ -471,8 +471,8 @@ public final class SettingsManager {
         gameSettingsAccess = loadGameSettingsPresets(null);
         launcherStateAccess = loadLauncherState(null);
 
-        if (Files.exists(Metadata.HMCL_LOCAL_HOME)) {
-            checkWritable(Metadata.HMCL_LOCAL_HOME);
+        if (Files.exists(Metadata.HMCLDL_LOCAL_HOME)) {
+            checkWritable(Metadata.HMCLDL_LOCAL_HOME);
         }
 
         if (launcherSettings.isSavable()) {
@@ -564,7 +564,7 @@ public final class SettingsManager {
 
     /// Checks whether root is reading per-workspace config data owned by another user.
     private static void checkLocalConfigOwner() {
-        checkOwner(Metadata.HMCL_LOCAL_HOME);
+        checkOwner(Metadata.HMCLDL_LOCAL_HOME);
         checkOwner(SETTINGS_LOCATION);
         checkOwner(STATE_LOCATION);
         checkOwner(LOCAL_GAME_DIRECTORIES_LOCATION);

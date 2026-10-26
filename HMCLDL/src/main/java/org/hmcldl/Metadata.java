@@ -55,36 +55,36 @@ public final class Metadata {
 
     public static final Path CURRENT_DIRECTORY = Path.of(System.getProperty("user.dir")).toAbsolutePath().normalize();
     public static final Path MINECRAFT_DIRECTORY = OperatingSystem.getWorkingDirectory("minecraft");
-    public static final Path HMCL_USER_HOME;
-    public static final Path HMCL_LOCAL_HOME;
+    public static final Path HMCLDL_USER_HOME;
+    public static final Path HMCLDL_LOCAL_HOME;
     public static final Path DEPENDENCIES_DIRECTORY;
 
     static {
-        String hmclHome = System.getProperty("hmcldl.home", System.getenv("HMCLDL_USER_HOME"));
-        if (StringUtils.isBlank(hmclHome)) {
+        String hmcldlHome = System.getProperty("hmcldl.home", System.getenv("HMCLDL_USER_HOME"));
+        if (StringUtils.isBlank(hmcldlHome)) {
             if (OperatingSystem.CURRENT_OS.isLinuxOrBSD()) {
                 String xdgData = System.getenv("XDG_DATA_HOME");
                 if (StringUtils.isNotBlank(xdgData)) {
-                    HMCL_USER_HOME = Path.of(xdgData, "hmcldl").toAbsolutePath().normalize();
+                    HMCLDL_USER_HOME = Path.of(xdgData, "hmcldl").toAbsolutePath().normalize();
                 } else {
-                    HMCL_USER_HOME = Path.of(System.getProperty("user.home"), ".local", "share", "hmcldl").toAbsolutePath().normalize();
+                    HMCLDL_USER_HOME = Path.of(System.getProperty("user.home"), ".local", "share", "hmcldl").toAbsolutePath().normalize();
                 }
             } else {
-                HMCL_USER_HOME = OperatingSystem.getWorkingDirectory("hmcldl");
+                HMCLDL_USER_HOME = OperatingSystem.getWorkingDirectory("hmcldl");
             }
         } else {
-            HMCL_USER_HOME = Path.of(hmclHome).toAbsolutePath().normalize();
+            HMCLDL_USER_HOME = Path.of(hmcldlHome).toAbsolutePath().normalize();
         }
 
-        String hmclCurrentDir = System.getProperty("hmcldl.dir", System.getenv("HMCLDL_LOCAL_HOME"));
-        HMCL_LOCAL_HOME = StringUtils.isNotBlank(hmclCurrentDir)
-                ? Path.of(hmclCurrentDir).toAbsolutePath().normalize()
+        String hmcldlCurrentDir = System.getProperty("hmcldl.dir", System.getenv("HMCLDL_LOCAL_HOME"));
+        HMCLDL_LOCAL_HOME = StringUtils.isNotBlank(hmcldlCurrentDir)
+                ? Path.of(hmcldlCurrentDir).toAbsolutePath().normalize()
                 : CURRENT_DIRECTORY.resolve(".hmcldl");
 
-        String hmclDependencies = System.getProperty("hmcldl.dependencies.dir", System.getenv("HMCLDL_DEPENDENCIES_DIR"));
-        DEPENDENCIES_DIRECTORY = StringUtils.isNotBlank(hmclDependencies)
-                ? Path.of(hmclDependencies).toAbsolutePath().normalize()
-                : HMCL_LOCAL_HOME.resolve("dependencies");
+        String hmcldlDependencies = System.getProperty("hmcldl.dependencies.dir", System.getenv("HMCLDL_DEPENDENCIES_DIR"));
+        DEPENDENCIES_DIRECTORY = StringUtils.isNotBlank(hmcldlDependencies)
+                ? Path.of(hmcldlDependencies).toAbsolutePath().normalize()
+                : HMCLDL_LOCAL_HOME.resolve("dependencies");
     }
 
     public static boolean isStable() {

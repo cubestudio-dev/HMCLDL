@@ -96,5 +96,5 @@ public final class ForgeVersionList extends ComponentVersionList<ForgeRemoteVers
                 });
     }
 
-    public static final URI FORGE_LIST = URI.create("https://hmcl.glavo.site/metadata/forge/");
+    public static final URI FORGE_LIST = URI.create("https://alist.8mi.tech/d/mirror/HMCL-Metadata/Auto/forge/");
 }

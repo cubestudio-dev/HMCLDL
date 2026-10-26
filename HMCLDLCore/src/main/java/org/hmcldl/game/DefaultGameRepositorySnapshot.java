@@ -31,7 +31,7 @@ import static org.hmcldl.util.logging.Logger.LOG;
 /// change.
 ///
 /// Mutation methods are package-private: only code in `org.hmcldl.game` may assemble a
-/// snapshot. Subclasses such as HMCL-specific snapshots may override [#newEmpty()] to preserve
+/// snapshot. Subclasses such as HMCLDL-specific snapshots may override [#newEmpty()] to preserve
 /// concrete type through [#mutableCopy()], analogous to
 /// [DefaultGameInstance#withNewSnapshot(DefaultGameRepositorySnapshot)].
 @NotNullByDefault

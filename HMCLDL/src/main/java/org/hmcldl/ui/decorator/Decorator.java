@@ -208,7 +208,6 @@ public final class Decorator {
 
         Insets insets = getWindowInsets();
         boolean saveBounds = !currentStage.isIconified()
-                // https://github.com/HMCL-dev/HMCL/issues/4290
                 && (OperatingSystem.CURRENT_OS == OperatingSystem.MACOS
                 || !currentStage.isFullScreen() && !currentStage.isMaximized());
 
@@ -893,7 +892,7 @@ public final class Decorator {
             resetRootTransform();
 
             // Proactively triggering GC after the window open animation typically
-            // reduces physical memory usage after HMCL startup.
+            // reduces physical memory usage after HMCLDL startup.
             Controllers.trimHeap();
         });
         // Apply the initial frame before WINDOW_SHOWING returns so the window cannot flash at full opacity.

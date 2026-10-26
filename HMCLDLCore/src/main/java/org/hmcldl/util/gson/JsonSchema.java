@@ -32,9 +32,9 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.Objects;
 
-/// Stores a raw JSON schema string and, when possible, its parsed HMCL schema identifier.
+/// Stores a raw JSON schema string and, when possible, its parsed HMCLDL schema identifier.
 ///
-/// The JSON representation is always a string. HMCL-owned schemas use the following
+/// The JSON representation is always a string. HMCLDL-owned schemas use the following
 /// fixed URL form, but other strings can still be represented as unparseable schemas:
 ///
 /// `https://schemas.glavo.site/hmcl/<id>/<version>`
@@ -42,9 +42,9 @@ import java.util.Objects;
 /// Canonical URLs written by this class use `major.minor.patch` versions. Parsing
 /// also accepts `major.minor` versions and treats the missing patch number as `0`.
 ///
-/// Parsed HMCL schemas use the following compatibility policy:
+/// Parsed HMCLDL schemas use the following compatibility policy:
 ///
-/// - When the schema string is not parseable as an HMCL schema URL, the file must be rejected.
+/// - When the schema string is not parseable as an HMCLDL schema URL, the file must be rejected.
 /// - When the schema ID differs from the expected schema, the file must be rejected.
 /// - When the current code does not support the major version, the file must be rejected.
 /// - When the minor version is newer, the file may be read but must not be overwritten.
@@ -52,7 +52,7 @@ import java.util.Objects;
 ///   and unknown serialized members.
 ///
 /// @param value the raw JSON schema string
-/// @param parsed the parsed HMCL schema identifier, or `null` when the string is not parseable
+/// @param parsed the parsed HMCLDL schema identifier, or `null` when the string is not parseable
 /// @author Glavo
 @JsonSerializable
 @JsonAdapter(JsonSchema.Adapter.class)
@@ -61,11 +61,11 @@ public record JsonSchema(String value, @Nullable Parsed parsed) {
     /// The JSON property name used for schema strings.
     public static final String PROPERTY_SCHEMA = "$schema";
 
-    /// The HMCL schema URL prefix.
+    /// The HMCLDL schema URL prefix.
     private static final String URL_PREFIX = "https://schemas.glavo.site/hmcl/";
 
     /// @param value the raw JSON schema string
-    /// @param parsed the parsed HMCL schema identifier, or `null` when the string is not parseable
+    /// @param parsed the parsed HMCLDL schema identifier, or `null` when the string is not parseable
     public JsonSchema {
         Objects.requireNonNull(value);
         if (parsed != null && !parsed.equals(parseSchemaUrl(value))) {
@@ -80,7 +80,7 @@ public record JsonSchema(String value, @Nullable Parsed parsed) {
         this(value, parseSchemaUrl(value));
     }
 
-    /// Creates a parsed HMCL schema from an ID and version.
+    /// Creates a parsed HMCLDL schema from an ID and version.
     ///
     /// @param id the stable schema identifier
     /// @param version the schema version
@@ -88,7 +88,7 @@ public record JsonSchema(String value, @Nullable Parsed parsed) {
         this(new Parsed(id, version));
     }
 
-    /// Creates a schema from a parsed HMCL schema identifier.
+    /// Creates a schema from a parsed HMCLDL schema identifier.
     private JsonSchema(Parsed parsed) {
         this(parsed.url(), parsed);
     }
@@ -177,7 +177,7 @@ public record JsonSchema(String value, @Nullable Parsed parsed) {
         return new JsonSchema(primitive.getAsString());
     }
 
-    /// Parses an HMCL schema URL, returning `null` for any other string.
+    /// Parses an HMCLDL schema URL, returning `null` for any other string.
     private static @Nullable Parsed parseSchemaUrl(String value) {
         Objects.requireNonNull(value);
 
@@ -221,17 +221,17 @@ public record JsonSchema(String value, @Nullable Parsed parsed) {
                 || (version.patch() == 0 && versionString.equals(version.major() + "." + version.minor()));
     }
 
-    /// Returns whether this schema string is parseable as an HMCL schema URL.
+    /// Returns whether this schema string is parseable as an HMCLDL schema URL.
     public boolean isParsed() {
         return parsed != null;
     }
 
-    /// Returns the parsed HMCL schema ID, or `null` when the schema string is not parseable.
+    /// Returns the parsed HMCLDL schema ID, or `null` when the schema string is not parseable.
     public @Nullable String id() {
         return parsed != null ? parsed.id : null;
     }
 
-    /// Returns the parsed HMCL schema version, or `null` when the schema string is not parseable.
+    /// Returns the parsed HMCLDL schema version, or `null` when the schema string is not parseable.
     public @Nullable Version version() {
         return parsed != null ? parsed.version : null;
     }
@@ -268,7 +268,7 @@ public record JsonSchema(String value, @Nullable Parsed parsed) {
         return true;
     }
 
-    /// Parsed identifier for an HMCL schema URL.
+    /// Parsed identifier for an HMCLDL schema URL.
     ///
     /// @param id the stable schema identifier
     /// @param version the schema version

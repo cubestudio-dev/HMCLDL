@@ -299,13 +299,13 @@ public class DefaultLauncher extends Launcher {
         Optional<String> gameVersion = findGameVersion();
 
         // lwjgl assumes path to native libraries encoded by ASCII.
-        // Here is a workaround for this issue: https://github.com/HMCL-dev/HMCL/issues/1141.
+        // Here is a workaround for this issue:.
         String nativeFolderPath = FileUtils.getAbsolutePath(nativeFolder);
         Path tempNativeFolder = null;
         if ((OperatingSystem.CURRENT_OS == OperatingSystem.LINUX || OperatingSystem.CURRENT_OS == OperatingSystem.MACOS)
                 && !StringUtils.isASCII(nativeFolderPath)
                 && gameVersion.isPresent() && GameVersionNumber.compare(gameVersion.get(), "1.19") < 0) {
-            tempNativeFolder = Paths.get("/", "tmp", "hmcl-natives-" + UUID.randomUUID());
+            tempNativeFolder = Paths.get("/", "tmp", "hmcldl-natives-" + UUID.randomUUID());
             nativeFolderPath = tempNativeFolder + File.pathSeparator + nativeFolderPath;
         }
         configuration.put("${natives_directory}", nativeFolderPath);
@@ -396,8 +396,6 @@ public class DefaultLauncher extends Launcher {
 
         if (options.isFullscreen())
             res.add("--fullscreen");
-
-        // https://github.com/HMCL-dev/HMCL/issues/774
         if (options.getProxyOption() instanceof ProxyOption.Socks socksProxy) {
             res.add("--proxyHost");
             res.add(socksProxy.host());
@@ -641,7 +639,7 @@ public class DefaultLauncher extends Launcher {
                 pair("${primary_jar}", FileUtils.getAbsolutePath(instance.getInstanceJarFile())),
                 pair("${language}", Locale.getDefault().toLanguageTag()),
 
-                // defined by HMCL
+                // defined by HMCLDL
                 // libraries_directory stands for historical reasons here. We don't know the official launcher
                 // had already defined "library_directory" as the placeholder for path to ".minecraft/libraries"
                 // when we propose this placeholder.
@@ -851,7 +849,7 @@ public class DefaultLauncher extends Launcher {
 
         // Re-append the installer last so OptiFine follows Forge when Forge has no patch entry.
         if (selectedOptiFineInstallerFile != null &&
-                // With ModLauncher, OptiFine is discovered via HMCLTransformerDiscoveryService, not classpath.
+                // With ModLauncher, OptiFine is discovered via HMCLDLTransformerDiscoveryService, not classpath.
                 !GameComponentAnalyzer.MOD_LAUNCHER_MAIN.equals(manifest.mainClass())) {
             classpath.add(FileUtils.getAbsolutePath(selectedOptiFineInstallerFile));
         }

@@ -40,7 +40,7 @@
 ./gradlew build
 ```
 
-构建产物位于 `HMCL/build/libs/`。
+构建产物位于 `HMCLDL/build/libs/`。
 
 ## 版权声明
 

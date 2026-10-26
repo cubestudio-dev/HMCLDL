@@ -142,7 +142,7 @@ public final class CacheFileTask extends FetchTask<Path> {
         }
 
         return new Context() {
-            private final Path temp = Files.createTempFile("hmcl-download-", null);
+            private final Path temp = Files.createTempFile("hmcldl-download-", null);
             private final FileChannel fileOutput = FileChannel.open(temp,
                     StandardOpenOption.WRITE,
                     StandardOpenOption.TRUNCATE_EXISTING,

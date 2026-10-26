@@ -34,7 +34,7 @@ import java.util.*;
  */
 public final class DiscoFetchJavaListTask extends Task<EnumMap<JavaPackageType, TreeMap<Integer, DiscoJavaRemoteVersion>>> {
 
-    public static final String API_ROOT = System.getProperty("hmcl.discoapi.override", "https://api.foojay.io/disco/v3.0");
+    public static final String API_ROOT = System.getProperty("hmcldl.discoapi.override", "https://api.foojay.io/disco/v3.0");
 
     private final DiscoJavaDistribution distribution;
     private final String archiveType;

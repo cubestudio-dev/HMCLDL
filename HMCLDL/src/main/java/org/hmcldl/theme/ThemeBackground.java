@@ -134,7 +134,7 @@ public sealed interface ThemeBackground
         return trimmed;
     }
 
-    /// A source that delegates to HMCL's launcher default background resolution.
+    /// A source that delegates to HMCLDL's launcher default background resolution.
     @NotNullByDefault
     record Default() implements ThemeBackground {
         /// Adds this source to a JSON object.

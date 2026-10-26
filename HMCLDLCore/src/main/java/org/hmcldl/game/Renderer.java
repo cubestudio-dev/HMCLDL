@@ -99,7 +99,7 @@ public sealed interface Renderer permits Renderer.Default, Renderer.Driver, Rend
         /// The graphics API that this driver belongs to.
         GraphicsAPI api();
 
-        /// If this driver can be loaded via [mesa-loader-windows](https://github.com/HMCL-dev/mesa-loader-windows),
+        /// If this driver can be loaded via [mesa-loader-windows](the upstream mesa-loader-windows project),
         /// return the driver name, otherwise return `null`.
         @Contract(pure = true)
         default @Nullable String mesaDriverName() {

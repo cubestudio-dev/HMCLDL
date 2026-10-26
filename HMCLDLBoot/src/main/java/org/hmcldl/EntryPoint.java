@@ -25,6 +25,6 @@ public final class EntryPoint {
     }
 
     public static void main(String[] args) {
-        throw new AssertionError("This method should not be called, please verify that the HMCL is complete.");
+        throw new AssertionError("This method should not be called, please verify that the HMCLDL is complete.");
     }
 }

@@ -348,7 +348,7 @@ public final class MultiMCInstancePatch {
                     break;
                 }
                 case "XR:Initial": // Flag for chat report. See https://discord.com/channels/132965178051526656/134843027553255425/1380885829702127616
-                case "texturepacks": // HMCL hasn't support checking whether a game version supports texture packs.
+                case "texturepacks": // HMCLDL hasn't support checking whether a game version supports texture packs.
                 case "no-texturepacks": {
                     break;
                 }
@@ -378,11 +378,11 @@ public final class MultiMCInstancePatch {
 
         {
             libraries.add(0, BOOTSTRAP_LIBRARY);
-            jvmArguments.add(new StringArgument("-Dhmcl.mmc.bootstrap=" + NetworkUtils.withQuery("hmcl:///bootstrap_profile_v1/", Map.of(
+            jvmArguments.add(new StringArgument("-Dhmcldl.mmc.bootstrap=" + NetworkUtils.withQuery("hmcldl:///bootstrap_profile_v1/", Map.of(
                     "main_class", mainClass,
                     "installer", MultiMCComponents.getInstallerProfile()
             ))));
-            mainClass = "org.hmcldl.HMCLMultiMCBootstrap";
+            mainClass = "org.hmcldl.HMCLDLMultiMCBootstrap";
         }
 
         GameInstanceManifest version = new GameInstanceManifest(instanceId)

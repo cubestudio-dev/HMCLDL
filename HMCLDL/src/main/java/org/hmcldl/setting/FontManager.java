@@ -56,17 +56,17 @@ public final class FontManager {
 
         // Recommended
 
-        font = tryLoadLocalizedFont(Metadata.HMCL_LOCAL_HOME.resolve("font"));
+        font = tryLoadLocalizedFont(Metadata.HMCLDL_LOCAL_HOME.resolve("font"));
         if (font != null)
             return font;
 
-        font = tryLoadLocalizedFont(Metadata.HMCL_USER_HOME.resolve("font"));
+        font = tryLoadLocalizedFont(Metadata.HMCLDL_USER_HOME.resolve("font"));
         if (font != null)
             return font;
 
         // Legacy
 
-        font = tryLoadDefaultFont(Metadata.HMCL_LOCAL_HOME);
+        font = tryLoadDefaultFont(Metadata.HMCLDL_LOCAL_HOME);
         if (font != null)
             return font;
 
@@ -74,7 +74,7 @@ public final class FontManager {
         if (font != null)
             return font;
 
-        font = tryLoadDefaultFont(Metadata.HMCL_USER_HOME);
+        font = tryLoadDefaultFont(Metadata.HMCLDL_USER_HOME);
         if (font != null)
             return font;
 
@@ -105,7 +105,7 @@ public final class FontManager {
     private static void updateFont() {
         String fontFamily = settings().launcherFontFamilyProperty().get();
         if (fontFamily == null)
-            fontFamily = System.getProperty("hmcl.font.override");
+            fontFamily = System.getProperty("hmcldl.font.override");
         if (fontFamily == null)
             fontFamily = System.getenv("HMCLDL_FONT");
 
@@ -239,8 +239,6 @@ public final class FontManager {
         settings().launcherFontFamilyProperty().set(fontFamily);
         updateFont();
     }
-
-    // https://github.com/HMCL-dev/HMCL/issues/4072
     public record FontReference(@NotNull String family, @Nullable String style) {
         public FontReference {
             Objects.requireNonNull(family);

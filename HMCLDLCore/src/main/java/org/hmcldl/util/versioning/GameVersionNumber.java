@@ -407,7 +407,6 @@ public abstract sealed class GameVersionNumber implements Comparable<GameVersion
                 releaseType = ReleaseType.PRE_RELEASE;
                 eaVersion = VersionNumber.asVersion(suffix.substring(" Pre-Release ".length()));
             } else if (suffix.startsWith(" Pre-release ")) {
-                // https://github.com/HMCL-dev/HMCL/issues/5476
                 needNormalize = true;
                 releaseType = ReleaseType.PRE_RELEASE;
                 eaVersion = VersionNumber.asVersion(suffix.substring(" Pre-release ".length()));

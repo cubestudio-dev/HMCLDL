@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.glavo.site/hmcl/user-settings/1.0.0",
-  "title": "HMCL User Settings",
+  "title": "HMCLDL User Settings",
   "type": "object",
   "additionalProperties": true,
   "required": [

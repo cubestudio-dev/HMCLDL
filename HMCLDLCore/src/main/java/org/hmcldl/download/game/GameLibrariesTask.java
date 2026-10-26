@@ -140,8 +140,6 @@ public final class GameLibrariesTask extends Task<Void> {
             if (!library.appliesToCurrentEnvironment()) {
                 continue;
             }
-
-            // https://github.com/HMCL-dev/HMCL/issues/3975
             if (library.is("net.minecraftforge", "minecraftforge")
                     && gameRepository instanceof DefaultGameRepository defaultGameRepository) {
                 List<FMLLib> fmlLibs = getFMLLibs(library.version());
@@ -179,8 +177,8 @@ public final class GameLibrariesTask extends Task<Void> {
                 if (!Files.exists(file)) {
                     try (InputStream input = Objects.requireNonNull(
                             GameLibrariesTask.class.getResourceAsStream(
-                                    "/assets/game/HMCLMultiMCBootstrap-1.0.jar"),
-                            "Bundled HMCLMultiMCBootstrap is missing.")) {
+                                    "/assets/game/HMCLDLMultiMCBootstrap-1.0.jar"),
+                            "Bundled HMCLDLMultiMCBootstrap is missing.")) {
                         Files.createDirectories(file.getParent());
                         Files.copy(input, file, StandardCopyOption.REPLACE_EXISTING);
                     }
@@ -188,8 +186,8 @@ public final class GameLibrariesTask extends Task<Void> {
             } else if (library.is("org.hmcldl", "transformer-discovery-service")) {
                 try (InputStream input = Objects.requireNonNull(
                         GameLibrariesTask.class.getResourceAsStream(
-                                "/assets/game/HMCLTransformerDiscoveryService-1.0.jar"),
-                        "Bundled HMCLTransformerDiscoveryService is missing.")) {
+                                "/assets/game/HMCLDLTransformerDiscoveryService-1.0.jar"),
+                        "Bundled HMCLDLTransformerDiscoveryService is missing.")) {
                     Files.createDirectories(file.getParent());
                     Files.copy(input, file, StandardCopyOption.REPLACE_EXISTING);
                 }
@@ -234,7 +232,7 @@ public final class GameLibrariesTask extends Task<Void> {
 
     private record FMLLib(String name, String sha1, String downloadUrl) {
         FMLLib(String name, String sha1) {
-            this(name, sha1, "https://hmcl.glavo.site/metadata/fmllibs/" + name);
+            this(name, sha1, "https://alist.8mi.tech/d/mirror/HMCL-Metadata/Auto/fmllibs/" + name);
         }
     }
 }

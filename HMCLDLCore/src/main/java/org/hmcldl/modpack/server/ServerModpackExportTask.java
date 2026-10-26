@@ -41,7 +41,7 @@ import java.util.List;
 
 import static org.hmcldl.util.logging.Logger.LOG;
 
-/// Exports one registered game instance as an HMCL server modpack archive.
+/// Exports one registered game instance as an HMCLDL server modpack archive.
 @NotNullByDefault
 public class ServerModpackExportTask extends Task<Void> {
     /// The fixed instance snapshot exported by this task.

@@ -995,13 +995,13 @@ public final class Themes {
 
     /// Loads a default launcher background image from local workspace files.
     private static @Nullable Image loadLocalDefaultBackgroundImage() {
-        @Nullable Image image = randomImageIn(Metadata.HMCL_LOCAL_HOME.resolve("background"));
+        @Nullable Image image = randomImageIn(Metadata.HMCLDL_LOCAL_HOME.resolve("background"));
         if (image != null) {
             return image;
         }
 
         for (String extension : FXUtils.IMAGE_EXTENSIONS) {
-            image = tryLoadImage(Metadata.HMCL_LOCAL_HOME.resolve("background." + extension));
+            image = tryLoadImage(Metadata.HMCLDL_LOCAL_HOME.resolve("background." + extension));
             if (image != null) {
                 return image;
             }

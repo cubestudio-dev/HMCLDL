@@ -106,7 +106,7 @@ public final class LiteLoaderVersionList extends ComponentVersionList<LiteLoader
         }
     }
 
-    // Workaround for https://github.com/HMCL-dev/HMCL/issues/3147: Some LiteLoader artifacts aren't published on http://dl.liteloader.com/repo
+    // Workaround for: Some LiteLoader artifacts aren't published on http://dl.liteloader.com/repo
     private static final String SNAPSHOT_METADATA = "https://repo.mumfrey.com/content/repositories/snapshots/com/mumfrey/liteloader/%s-SNAPSHOT/maven-metadata.xml";
     private static final String SNAPSHOT_FILE = "https://repo.mumfrey.com/content/repositories/snapshots/com/mumfrey/liteloader/%s-SNAPSHOT/liteloader-%s-%s-%s-release.jar";
 

@@ -204,7 +204,6 @@ public class ModrinthInstallTask extends Task<Void> {
                         builder.component(GameComponentType.FORGE, modLoader.getValue());
                         break;
                     case "neoforge":
-                    // https://github.com/HMCL-dev/HMCL/pull/5170
                     case "neo-forge":
                         builder.component(GameComponentType.NEO_FORGE, modLoader.getValue());
                         break;

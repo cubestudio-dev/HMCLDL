@@ -1,0 +1,120 @@
+{
+  "$schema": "https://schemas.glavo.site/hmcl/theme-pack/1.0.0",
+  "id": "hmcldl.classic",
+  "version": "1.0.0",
+  "name": {
+    "default": "Classic",
+    "es": "Clásico",
+    "ja": "クラシック",
+    "ru": "Классическая",
+    "uk": "Класична",
+    "zh-Hans": "经典主题",
+    "zh-Hant": "經典主題",
+    "lzh": "舊觀"
+  },
+  "description": {
+    "default": "Classic HMCLDL launcher themes",
+    "es": "Temas clásicos del launcher HMCLDL",
+    "ja": "HMCLDL ランチャーのクラシックテーマ",
+    "ru": "Классические темы лаунчера HMCLDL",
+    "uk": "Класичні теми лаунчера HMCLDL",
+    "zh-Hans": "HMCLDL 启动器经典主题",
+    "zh-Hant": "HMCLDL 啟動器經典主題",
+    "lzh": "HMCLDL 啟動器之舊觀"
+  },
+  "authors": [
+    {
+      "name": {
+        "default": "HMCLDL",
+        "en-Qabs": "ꞀƆWH"
+      }
+    }
+  ],
+  "themes": [
+    {
+      "id": "2021-08-26",
+      "name": {
+        "default": "Current Theme",
+        "es": "Tema actual",
+        "ja": "現在のテーマ",
+        "ru": "Текущая тема",
+        "uk": "Поточна тема",
+        "zh-Hans": "当前主题",
+        "zh-Hant": "當前主題",
+        "lzh": "今觀"
+      },
+      "description": {
+        "default": "HMCLDL current theme",
+        "es": "Tema actual de HMCLDL",
+        "ja": "HMCLDL の現在のテーマ",
+        "ru": "Текущая тема HMCLDL",
+        "uk": "Поточна тема HMCLDL",
+        "zh-Hans": "HMCLDL 当前主题",
+        "zh-Hant": "HMCLDL 當前主題",
+        "lzh": "HMCLDL 之今觀"
+      },
+      "color": "#5C6BC0",
+      "brightness": "light",
+      "colorStyle": "fidelity",
+      "background": {
+        "type": "builtin",
+        "id": "2021-08-26",
+        "opacity": 1.0
+      },
+      "titleBar": {
+        "transparent": false
+      }
+    },
+    {
+      "id": "2016-02-25",
+      "name": "HMCLDL 3.3",
+      "description": {
+        "default": "HMCLDL 3.3 classic appearance",
+        "es": "Apariencia clásica de HMCLDL 3.3",
+        "ja": "HMCLDL 3.3 のクラシックな外観",
+        "ru": "Классический вид HMCLDL 3.3",
+        "uk": "Класичний вигляд HMCLDL 3.3",
+        "zh-Hans": "HMCLDL 3.3 经典外观",
+        "zh-Hant": "HMCLDL 3.3 經典外觀",
+        "lzh": "HMCLDL 3.3 之舊觀"
+      },
+      "color": "#5C6BC0",
+      "brightness": "light",
+      "colorStyle": "fidelity",
+      "background": {
+        "type": "builtin",
+        "id": "2016-02-25",
+        "opacity": 1.0
+      },
+      "titleBar": {
+        "transparent": true
+      }
+    },
+    {
+      "id": "2015-06-22",
+      "name": {
+        "default": "HMCLDL 2.3"
+      },
+      "description": {
+        "default": "HMCLDL 2.3 classic appearance",
+        "es": "Apariencia clásica de HMCLDL 2.3",
+        "ja": "HMCLDL 2.3 のクラシックな外観",
+        "ru": "Классический вид HMCLDL 2.3",
+        "uk": "Класичний вигляд HMCLDL 2.3",
+        "zh-Hans": "HMCLDL 2.3 经典外观",
+        "zh-Hant": "HMCLDL 2.3 經典外觀",
+        "lzh": "HMCLDL 2.3 之舊觀"
+      },
+      "color": "#E67E22",
+      "brightness": "light",
+      "colorStyle": "fidelity",
+      "background": {
+        "type": "builtin",
+        "id": "2015-06-22"
+      },
+      "titleBar": {
+        "transparent": false
+      }
+    }
+  ]
+}

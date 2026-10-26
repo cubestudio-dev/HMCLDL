@@ -39,7 +39,7 @@ import java.util.Set;
 public final class ThemePackExporter {
 
     /// Recommended file extension for theme-pack files.
-    public static final String FILE_EXTENSION = ".hmcl-theme";
+    public static final String FILE_EXTENSION = ".hmcldl-theme";
 
     /// Manifest entry name used by every exported theme pack.
     public static final String MANIFEST_ENTRY = "manifest.json";

@@ -24,7 +24,7 @@ import org.hmcldl.util.platform.NativeUtils;
 import org.jetbrains.annotations.NotNullByDefault;
 import org.jetbrains.annotations.Nullable;
 
-/// Provides mappings for the Shell API functions used by HMCL.
+/// Provides mappings for the Shell API functions used by HMCLDL.
 ///
 /// @author Glavo
 @NotNullByDefault

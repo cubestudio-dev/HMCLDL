@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.glavo.site/hmcl/game-directories/1.0.0",
-  "title": "HMCL Game Directories",
+  "title": "HMCLDL Game Directories",
   "type": "object",
   "additionalProperties": true,
   "required": [

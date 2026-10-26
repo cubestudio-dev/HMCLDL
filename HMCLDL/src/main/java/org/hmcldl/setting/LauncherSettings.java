@@ -74,7 +74,7 @@ public final class LauncherSettings extends ObservableSetting implements JsonSch
     static final String PROPERTY_SELECTED_INSTANCE = "selectedInstance";
 
     /// Default launcher theme used when no stored theme reference is available.
-    public static final ThemeReference DEFAULT_THEME_REFERENCE = new ThemeReference("hmcl.default", null);
+    public static final ThemeReference DEFAULT_THEME_REFERENCE = new ThemeReference("hmcldl.default", null);
 
     /// Theme appearance override key for theme brightness mode.
     public static final String THEME_APPEARANCE_BRIGHTNESS_MODE = "themeBrightnessMode";
@@ -496,7 +496,7 @@ public final class LauncherSettings extends ObservableSetting implements JsonSch
 
     // Networks
 
-    /// Whether HMCL automatically selects the number of download threads.
+    /// Whether HMCLDL automatically selects the number of download threads.
     @SerializedName("autoDownloadThreads")
     private final BooleanProperty autoDownloadThreads = new SimpleBooleanProperty(true);
 

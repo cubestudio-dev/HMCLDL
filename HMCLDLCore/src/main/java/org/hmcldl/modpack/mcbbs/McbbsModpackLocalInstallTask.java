@@ -172,7 +172,7 @@ public final class McbbsModpackLocalInstallTask extends Task<Void> {
             GameInstancePatch patch = new GameInstancePatch(PATCH_NAME).withLibraries(manifest.getLibraries());
             dependencies.add(repository.saveAsync(instanceManifest.addPatch(patch)));
         } else if (mcbbsPatch.isPresent()) {
-            // This mcbbs modpack was installed by HMCL.
+            // This mcbbs modpack was installed by HMCLDL.
             GameInstancePatch patch = mcbbsPatch.get().withLibraries(manifest.getLibraries());
             dependencies.add(repository.saveAsync(instanceManifest.addPatch(patch)));
         } else {

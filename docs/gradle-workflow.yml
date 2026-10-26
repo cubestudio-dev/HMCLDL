@@ -35,23 +35,23 @@ jobs:
       uses: actions/upload-artifact@v7
       with:
         name: HMCLDL-${{ env.SHORT_SHA }}-jar
-        path: HMCL/build/libs/HMCLDL-*.jar
+        path: HMCLDL/build/libs/HMCLDL-*.jar
         archive: false
     - name: Upload EXE
       uses: actions/upload-artifact@v7
       with:
         name: HMCLDL-${{ env.SHORT_SHA }}-exe
-        path: HMCL/build/libs/HMCLDL-*.exe
+        path: HMCLDL/build/libs/HMCLDL-*.exe
         archive: false
     - name: Upload SH
       uses: actions/upload-artifact@v7
       with:
         name: HMCLDL-${{ env.SHORT_SHA }}-sh
-        path: HMCL/build/libs/HMCLDL-*.sh
+        path: HMCLDL/build/libs/HMCLDL-*.sh
         archive: false
     - name: Upload DEB
       uses: actions/upload-artifact@v7
       with:
         name: HMCLDL-${{ env.SHORT_SHA }}-deb
-        path: HMCL/build/libs/HMCLDL-*.deb
+        path: HMCLDL/build/libs/HMCLDL-*.deb
         archive: false

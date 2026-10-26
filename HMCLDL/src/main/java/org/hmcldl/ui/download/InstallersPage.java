@@ -21,7 +21,7 @@ import org.hmcldl.download.DownloadProvider;
 import org.hmcldl.download.ComponentRemoteVersion;
 import org.hmcldl.game.GameComponentType;
 import org.hmcldl.game.GameInstanceID;
-import org.hmcldl.game.HMCLGameRepository;
+import org.hmcldl.game.HMCLDLGameRepository;
 import org.hmcldl.ui.Controllers;
 import org.hmcldl.ui.InstallerItem;
 import org.hmcldl.ui.construct.MessageDialogPane;
@@ -38,13 +38,13 @@ public class InstallersPage extends AbstractInstallersPage {
 
     private boolean isNameModifiedByUser = false;
 
-    public InstallersPage(WizardController controller, HMCLGameRepository repository, String gameVersion, DownloadProvider downloadProvider) {
+    public InstallersPage(WizardController controller, HMCLDLGameRepository repository, String gameVersion, DownloadProvider downloadProvider) {
         super(controller, gameVersion, downloadProvider);
 
         txtName.getValidators().addAll(
                 new RequiredValidator(),
                 new Validator(i18n("install.new_game.already_exists"), str -> !repository.instanceIdConflicts(str)),
-                new Validator(i18n("install.new_game.malformed"), HMCLGameRepository::isValidInstanceId));
+                new Validator(i18n("install.new_game.malformed"), HMCLDLGameRepository::isValidInstanceId));
         installable.bind(createBooleanBinding(txtName::validate, txtName.textProperty()));
 
         txtName.textProperty().addListener((obs, oldText, newText) -> isNameModifiedByUser = true);

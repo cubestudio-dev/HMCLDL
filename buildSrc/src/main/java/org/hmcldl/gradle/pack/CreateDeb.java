@@ -41,23 +41,23 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 
-/// Creates a Debian package for the current HMCL channel.
+/// Creates a Debian package for the current HMCLDL channel.
 ///
 /// ## Package layout
 ///
 /// The generated `data.tar.gz` contains four installed artifacts:
 ///
-/// - the bundled HMCL shell launcher under `/usr/share/java/hmcl/`
+/// - the bundled HMCLDL shell launcher under `/usr/share/java/hmcldl/`
 /// - a channel-specific command under `/usr/bin/`
 /// - a desktop entry under `/usr/share/applications/`
-/// - the HMCL icon under `/usr/share/icons/hicolor/256x256/apps/`
+/// - the HMCLDL icon under `/usr/share/icons/hicolor/256x256/apps/`
 ///
 /// ## Channel commands and aliases
 ///
-/// Every package installs a channel-specific executable such as `hmcl-stable`
-/// or `hmcl-beta`. The generic `hmcl` command is intentionally not shipped as a
+/// Every package installs a channel-specific executable such as `hmcldl-stable`
+/// or `hmcldl-beta`. The generic `hmcldl` command is intentionally not shipped as a
 /// plain file. Instead, maintainer scripts register the channel command into
-/// the shared `hmcl` alternatives group so multiple channel packages can
+/// the shared `hmcldl` alternatives group so multiple channel packages can
 /// coexist without file conflicts.
 ///
 /// @author Glavo
@@ -232,15 +232,15 @@ public abstract class CreateDeb extends DefaultTask {
                 Priority: optional
                 Architecture: all
                 Installed-Size: %d
-                Maintainer: Glavo <zjx001202@gmail.com>
-                Description: Hello Minecraft! Launcher Download Launcher
+                Maintainer: cubestudio-dev <cubestudio@qq.com>
+                Description: HMCLDL - Hello Minecraft! Launcher Download Launcher
                 Homepage: https://github.com/cubestudio-dev/HMCLDL
                 """.formatted(getCurrentType().getPackageName(), getVersion().get(), Math.max(installedSize, 1)) + "\n";
     }
 
-    private static final String COMMON_LAUNCHER_PATH = "/usr/bin/hmcl";
+    private static final String COMMON_LAUNCHER_PATH = "/usr/bin/hmcldl";
 
-    /// Registers the channel command into the shared `hmcl` alternatives group.
+    /// Registers the channel command into the shared `hmcldl` alternatives group.
     private String getPostinst() {
         return """
                 #!/bin/sh
@@ -252,7 +252,7 @@ public abstract class CreateDeb extends DefaultTask {
                 """.formatted(COMMON_LAUNCHER_PATH, getLauncherPath(), getCurrentType().getAlternativesPriority());
     }
 
-    /// Removes the channel command from the shared `hmcl` alternatives group.
+    /// Removes the channel command from the shared `hmcldl` alternatives group.
     private String getPrerm() {
         return """
                 #!/bin/sh
@@ -269,18 +269,18 @@ public abstract class CreateDeb extends DefaultTask {
         return """
                 #!/usr/bin/env bash
                 cd "$HOME"
-                if [ -z "${HMCL_USER_HOME:-}" ]; then
+                if [ -z "${HMCLDL_USER_HOME:-}" ]; then
                     if [ -z "${XDG_DATA_HOME:-}" ]; then
-                        export HMCL_USER_HOME="$HOME/.local/share/hmcldl"
+                        export HMCLDL_USER_HOME="$HOME/.local/share/hmcldl"
                     else
-                        export HMCL_USER_HOME="$XDG_DATA_HOME/hmcl"
+                        export HMCLDL_USER_HOME="$XDG_DATA_HOME/hmcldl"
                     fi
                 fi
-                if [ -z "${HMCL_LOCAL_HOME:-}" ]; then
-                    export HMCL_LOCAL_HOME="$HMCL_USER_HOME/local-%s"
+                if [ -z "${HMCLDL_LOCAL_HOME:-}" ]; then
+                    export HMCLDL_LOCAL_HOME="$HMCLDL_USER_HOME/local-%s"
                 fi
-                if [ -z "${HMCL_DEPENDENCIES_DIR:-}" ]; then
-                    export HMCL_DEPENDENCIES_DIR="$HMCL_USER_HOME/dependencies"
+                if [ -z "${HMCLDL_DEPENDENCIES_DIR:-}" ]; then
+                    export HMCLDL_DEPENDENCIES_DIR="$HMCLDL_USER_HOME/dependencies"
                 fi
                 exec %s "$@"
                 """.formatted(getCurrentTypeName(), getTargetPath());
@@ -292,7 +292,7 @@ public abstract class CreateDeb extends DefaultTask {
                 [Desktop Entry]
                 Type=Application
                 Name=%s
-                Comment=Hello Minecraft! Launcher Download Launcher
+                Comment=HMCLDL - Minecraft Downloader
                 Exec=%s
                 Icon=%s
                 Terminal=false

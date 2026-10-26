@@ -17,7 +17,7 @@
  */
 package org.hmcldl.gradle.pack;
 
-/// Debian packaging metadata for one HMCL release type.
+/// Debian packaging metadata for one HMCLDL release type.
 ///
 /// The package name, installed command, desktop file, and alternatives
 /// priority are intentionally centralized here so `CreateDeb` can stay focused
@@ -53,7 +53,7 @@ public enum ReleaseType {
         return displayName;
     }
 
-    /// Priority used when registering the generic `hmcl` alias.
+    /// Priority used when registering the generic `hmcldl` alias.
     public int getAlternativesPriority() {
         return alternativesPriority;
     }

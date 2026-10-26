@@ -5,7 +5,7 @@ include(
     "HMCLDLBoot"
 )
 
-val minecraftLibraries = listOf("HMCLTransformerDiscoveryService", "HMCLMultiMCBootstrap")
+val minecraftLibraries = listOf("HMCLDLTransformerDiscoveryService", "HMCLDLMultiMCBootstrap")
 include(minecraftLibraries)
 
 for (library in minecraftLibraries) {

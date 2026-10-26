@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /// Thin wrapper around the Windows [`IPropertyStore`](https://learn.microsoft.com/windows/win32/api/propsys/nn-propsys-ipropertystore)
-/// COM interface, limited to the operations HMCL needs for window AppUserModel properties.
+/// COM interface, limited to the operations HMCLDL needs for window AppUserModel properties.
 ///
 /// Instances own one COM reference. Callers must release that reference with
 /// [`#close()`] or [`#Release()`] when the store is no longer needed.
