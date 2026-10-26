@@ -1,5 +1,4 @@
 [versions]
-hmclauncher = "3.7.0.1"
 jetbrains-annotations = "26.1.0"
 kala-compress = "1.27.1-5"
 kala-encoding-detctor = "0.1.0"
@@ -17,10 +16,8 @@ fxsvgimage = "1.9.1"
 jna = "5.18.1"
 pci-ids = "0.4.0"
 java-info = "1.0"
-authlib-injector = "1.2.8"
 lwjgl-unsafe-agent = "2.0"
 monet-fx = "0.4.0"
-terracotta = "0.4.2"
 nayuki-qrcodegen = "1.8.0"
 jwebp = "0.2.0"
 weburl = "0.2.0"
@@ -35,7 +32,6 @@ jimfs = "1.3.0"
 shadow = "9.6.1"
 
 [libraries]
-hmclauncher = { module = "org.glavo.hmcl:HMCLauncher", version.ref = "hmclauncher" }
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
 kala-compress-zip = { module = "org.glavo.kala:kala-compress-archivers-zip", version.ref = "kala-compress" }
 kala-compress-tar = { module = "org.glavo.kala:kala-compress-archivers-tar", version.ref = "kala-compress" }
@@ -56,7 +52,6 @@ jna = { module = "net.java.dev.jna:jna", version.ref = "jna" }
 jna-platform = { module = "net.java.dev.jna:jna-platform", version.ref = "jna" }
 pci-ids = { module = "org.glavo:pci-ids", version.ref = "pci-ids" }
 java-info = { module = "org.glavo:java-info", version.ref = "java-info" }
-authlib-injector = { module = "org.glavo.hmcl:authlib-injector", version.ref = "authlib-injector" }
 lwjgl-unsafe-agent = { module = "org.glavo:lwjgl-unsafe-agent", version.ref = "lwjgl-unsafe-agent" }
 monet-fx = { module = "org.glavo:MonetFX", version.ref = "monet-fx" }
 nayuki-qrcodegen = { module = "io.nayuki:qrcodegen", version.ref = "nayuki-qrcodegen" }

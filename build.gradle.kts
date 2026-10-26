@@ -1,5 +1,3 @@
-import org.jackhuang.hmcl.gradle.ci.CheckUpdate
-import org.jackhuang.hmcl.gradle.docs.UpdateDocuments
 import org.jackhuang.hmcl.gradle.l10n.ParseLanguageSubtagRegistry
 
 plugins {
@@ -87,14 +85,3 @@ tasks.register<ParseLanguageSubtagRegistry>("parseLanguageSubtagRegistry") {
     defaultScriptFile.set(layout.projectDirectory.file("HMCLCore/src/main/resources/assets/lang/default_script.csv"))
 }
 
-tasks.register<UpdateDocuments>("updateDocuments") {
-    documentsDir.set(layout.projectDirectory.dir("docs"))
-}
-
-tasks.register<CheckUpdate>("checkUpdateDev") {
-    uri.set("https://ci.huangyuhui.net/job/HMCL-nightly")
-}
-
-tasks.register<CheckUpdate>("checkUpdateStable") {
-    uri.set("https://ci.huangyuhui.net/job/HMCL-stable")
-}
