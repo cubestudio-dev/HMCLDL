@@ -33,7 +33,7 @@ tasks.test {
 }
 
 tasks.processResources {
-    into("org/jackhuang/hmcl/gradle/l10n") {
+    into("org/hmcldl/gradle/l10n") {
         from(projectDir.resolve("../HMCLCore/src/main/resources/assets/lang/"))
     }
 }

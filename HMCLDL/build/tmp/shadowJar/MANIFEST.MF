@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Created-By: Copyright(c) 2013-2025 huangyuhui.
+Implementation-Version: 1.0
+Main-Class: org.jackhuang.hmcl.Main
+Multi-Release: true
+Add-Opens: java.base/java.lang java.base/java.lang.reflect java.base/jdk
+ .internal.loader javafx.base/com.sun.javafx.binding javafx.base/com.sun
+ .javafx.event javafx.base/com.sun.javafx.runtime javafx.base/javafx.bea
+ ns.property javafx.graphics/javafx.css javafx.graphics/javafx.stage jav
+ afx.graphics/javafx.scene javafx.graphics/com.sun.glass.ui javafx.graph
+ ics/com.sun.javafx.stage javafx.graphics/com.sun.javafx.util javafx.gra
+ phics/com.sun.prism javafx.controls/com.sun.javafx.scene.control javafx
+ .controls/com.sun.javafx.scene.control.behavior javafx.graphics/com.sun
+ .javafx.tk.quantum javafx.controls/javafx.scene.control.skin jdk.attach
+ /sun.tools.attach
+Enable-Native-Access: ALL-UNNAMED
+Enable-Final-Field-Mutation: ALL-UNNAMED
+

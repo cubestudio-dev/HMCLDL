@@ -305,5 +305,5 @@ HMCL 總是會將 `zh-CN` 加入所有中文環境的搜尋列表中，將 `zh-T
 **English** (**Standard**, [uʍoᗡ ǝpᴉsd∩](README_en_Qabs.md)) | 中文 ([简体](README_zh_Hans.md), [繁體](README_zh_Hant.md), [文言](README_lzh.md)) | [日本語](README_ja.md) | [español](README_es.md) | [русский](README_ru.md) | [українська](README_uk.md)
 ```
 
-關於巨集的更多內容，請見 [MacroProcessor.java](../buildSrc/src/main/java/org/jackhuang/hmcl/gradle/docs/MacroProcessor.java)。
+關於巨集的更多內容，請見 [MacroProcessor.java](../buildSrc/src/main/java/org/hmcldl/gradle/docs/MacroProcessor.java)。
 <!-- #END BLOCK -->

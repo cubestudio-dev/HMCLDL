@@ -1,11 +1,11 @@
-import org.jackhuang.hmcl.gradle.l10n.ParseLanguageSubtagRegistry
+import org.hmcldl.gradle.l10n.ParseLanguageSubtagRegistry
 
 plugins {
     id("checkstyle")
     id("org.glavo.gradle-wrapper-neo") version "0.2.0"
 }
 
-group = "org.jackhuang"
+group = "org.hmcldl"
 version = "3.0"
 
 subprojects {
@@ -74,7 +74,7 @@ subprojects {
     }
 }
 
-org.jackhuang.hmcl.gradle.javafx.JavaFXUtils.register(rootProject)
+org.hmcldl.gradle.javafx.JavaFXUtils.register(rootProject)
 
 defaultTasks("clean", "build")
 
