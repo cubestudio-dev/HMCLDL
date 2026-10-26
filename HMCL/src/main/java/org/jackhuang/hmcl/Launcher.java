@@ -43,7 +43,6 @@ import org.jackhuang.hmcl.ui.Controllers;
 import org.jackhuang.hmcl.ui.FXUtils;
 import org.jackhuang.hmcl.ui.WindowsNativeUtils;
 import org.jackhuang.hmcl.ui.animation.AnimationUtils;
-import org.jackhuang.hmcl.upgrade.UpdateHandler;
 import org.jackhuang.hmcl.util.*;
 import org.jackhuang.hmcl.util.io.FileUtils;
 import org.jackhuang.hmcl.util.io.JarUtils;
@@ -156,9 +155,7 @@ public final class Launcher extends Application {
     private static void initializeSettingsRuntime() {
         DownloadProviders.init();
         ProxyManager.init();
-        Accounts.init();
         GameDirectoryManager.init();
-        AuthlibInjectorServers.init();
         AnimationUtils.init();
 
         CacheRepository.setInstance(HMCLCacheRepository.REPOSITORY);
@@ -281,11 +278,6 @@ public final class Launcher extends Application {
     }
 
     public static void main(String[] args) {
-        if (UpdateHandler.processArguments(args)) {
-            LOG.shutdown();
-            return;
-        }
-
         Thread.setDefaultUncaughtExceptionHandler(CRASH_REPORTER);
         AsyncTaskExecutor.setUncaughtExceptionHandler(new CrashReporter(false));
 

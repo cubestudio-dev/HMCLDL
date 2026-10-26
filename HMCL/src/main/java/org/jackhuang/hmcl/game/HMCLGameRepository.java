@@ -30,7 +30,6 @@ import org.jackhuang.hmcl.setting.DownloadProviders;
 import org.jackhuang.hmcl.setting.GameSettings;
 import org.jackhuang.hmcl.setting.GameDirectory;
 import org.jackhuang.hmcl.setting.LauncherSettings;
-import org.jackhuang.hmcl.setting.LegacyGameSettingsMigrator;
 import org.jackhuang.hmcl.setting.GameSettingsPresetID;
 import org.jackhuang.hmcl.util.FileSaver;
 import org.jackhuang.hmcl.util.Lang;
@@ -442,31 +441,14 @@ public final class HMCLGameRepository extends DefaultGameRepository {
         };
     }
 
-    /// Loads settings from disk for an unregistered id, running legacy migration when needed.
+    /// Loads settings from disk for an unregistered id, if present.
     private GameSettings.@Nullable Instance loadOrMigrateInstanceGameSettings(GameInstanceID instanceId) {
         Path file = getLayout().getInstanceGameSettingsFile(instanceId);
         if (Files.isRegularFile(file)) {
             return peekInstanceGameSettings(instanceId);
         }
 
-        @Nullable GameSettingsPresetID legacyParent = getGameDirectory().getLegacyGameSettings();
-        if (SettingsManager.getGameSettings(legacyParent) == null) {
-            legacyParent = null;
-        }
-
-        LegacyGameSettingsMigrator.InstanceMigrationResult migrationResult =
-                LegacyGameSettingsMigrator.migrateInstanceGameSettings(this, instanceId, legacyParent);
-        if (migrationResult == null) {
-            return null;
-        }
-
-        try {
-            writeInstanceGameSettings(instanceId, migrationResult.setting());
-            migrationResult.saveReceipt();
-        } catch (IOException e) {
-            LOG.warning("Failed to save migrated instance game settings for " + instanceId, e);
-        }
-        return migrationResult.setting();
+        return null;
     }
 
     // These instance ids are forbidden because they may conflict with modpack configuration filenames

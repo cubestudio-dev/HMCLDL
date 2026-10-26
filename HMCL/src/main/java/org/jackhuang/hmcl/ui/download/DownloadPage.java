@@ -27,26 +27,34 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import org.jackhuang.hmcl.Metadata;
 import org.jackhuang.hmcl.download.*;
+import org.jackhuang.hmcl.download.game.LibraryDownloadException;
+import org.jackhuang.hmcl.task.DownloadException;
+import org.jackhuang.hmcl.util.io.ResponseCodeException;
+import org.jackhuang.hmcl.download.game.GameAssetIndexDownloadTask;
 import org.jackhuang.hmcl.download.game.GameRemoteVersion;
-import org.jackhuang.hmcl.game.GameComponentType;
-import org.jackhuang.hmcl.game.GameInstanceID;
-import org.jackhuang.hmcl.game.HMCLDependencyManager;
-import org.jackhuang.hmcl.game.HMCLGameBuilder;
-import org.jackhuang.hmcl.game.HMCLGameRepository;
+import org.jackhuang.hmcl.game.*;
 import org.jackhuang.hmcl.setting.DownloadProviders;
 import org.jackhuang.hmcl.task.Schedulers;
 import org.jackhuang.hmcl.task.Task;
 import org.jackhuang.hmcl.ui.Controllers;
 import org.jackhuang.hmcl.ui.FXUtils;
+import org.jackhuang.hmcl.ui.construct.MessageDialogPane;
 import org.jackhuang.hmcl.ui.decorator.DecoratorAnimatedPage;
 import org.jackhuang.hmcl.ui.decorator.DecoratorPage;
 import org.jackhuang.hmcl.ui.wizard.Navigation;
 import org.jackhuang.hmcl.ui.wizard.WizardController;
 import org.jackhuang.hmcl.ui.wizard.WizardProvider;
 import org.jackhuang.hmcl.util.SettingsMap;
+import org.jackhuang.hmcl.util.StringUtils;
 import org.jackhuang.hmcl.util.i18n.I18n;
+import org.jackhuang.hmcl.download.VersionMismatchException;
 import org.jackhuang.hmcl.theme.Themes;
 import org.jetbrains.annotations.Nullable;
+
+import java.net.SocketTimeoutException;
+import java.net.URI;
+import java.util.concurrent.CancellationException;
+import java.util.zip.ZipException;
 
 import static org.jackhuang.hmcl.ui.FXUtils.runInFX;
 import static org.jackhuang.hmcl.util.i18n.I18n.i18n;
@@ -160,8 +168,6 @@ public class DownloadPage extends DecoratorAnimatedPage implements DecoratorPage
 
         @Override
         public void start(SettingsMap settings) {
-            settings.put(ModpackPage.GAME_DIRECTORY, repository.getGameDirectory());
-            settings.put(ModpackPage.REPOSITORY, repository);
             settings.put(GameComponentType.GAME.getPatchId(), gameVersion);
         }
 
@@ -206,7 +212,7 @@ public class DownloadPage extends DecoratorAnimatedPage implements DecoratorPage
         public Object finish(SettingsMap settings) {
             settings.put("title", i18n("install.new_game.installation"));
             settings.put("success_message", i18n("install.success"));
-            settings.put(FailureCallback.KEY, (settings1, exception, next) -> UpdateInstallerWizardProvider.alertFailureMessage(exception, next));
+            settings.put(FailureCallback.KEY, (settings1, exception, next) -> alertFailureMessage(exception, next));
 
             return finishVersionDownloadingAsync(settings);
         }
@@ -224,6 +230,58 @@ public class DownloadPage extends DecoratorAnimatedPage implements DecoratorPage
         @Override
         public boolean cancel() {
             return true;
+        }
+    }
+
+    /// Shows a readable message for a failed game/component installation.
+    private static void alertFailureMessage(Exception exception, Runnable next) {
+        if (exception instanceof LibraryDownloadException) {
+            String message = i18n("launch.failed.download_library", ((LibraryDownloadException) exception).getLibrary().name()) + "\n";
+            if (exception.getCause() instanceof ResponseCodeException rce) {
+                int responseCode = rce.getResponseCode();
+                String uri = rce.getUri();
+                if (responseCode == 404)
+                    message += i18n("download.code.404", uri);
+                else
+                    message += i18n("download.failed", uri, responseCode);
+            } else {
+                message += StringUtils.getStackTrace(exception.getCause());
+            }
+            Controllers.dialog(message, i18n("install.failed.downloading"), MessageDialogPane.MessageType.ERROR, next);
+        } else if (exception instanceof DownloadException) {
+            URI uri = ((DownloadException) exception).getUri();
+            if (exception.getCause() instanceof SocketTimeoutException) {
+                Controllers.dialog(i18n("install.failed.downloading.timeout", uri), i18n("install.failed.downloading"), MessageDialogPane.MessageType.ERROR, next);
+            } else if (exception.getCause() instanceof ResponseCodeException responseCodeException) {
+                if (I18n.hasKey("download.code." + responseCodeException.getResponseCode())) {
+                    Controllers.dialog(i18n("download.code." + responseCodeException.getResponseCode(), uri), i18n("install.failed.downloading"), MessageDialogPane.MessageType.ERROR, next);
+                } else {
+                    Controllers.dialog(i18n("install.failed.downloading.detail", uri) + "\n" + StringUtils.getStackTrace(exception.getCause()), i18n("install.failed.downloading"), MessageDialogPane.MessageType.ERROR, next);
+                }
+            } else {
+                Controllers.dialog(i18n("install.failed.downloading.detail", uri) + "\n" + StringUtils.getStackTrace(exception.getCause()), i18n("install.failed.downloading"), MessageDialogPane.MessageType.ERROR, next);
+            }
+        } else if (exception instanceof UnsupportedInstallationException unsupportedInstallationException) {
+            switch (unsupportedInstallationException.getReason()) {
+                case UnsupportedInstallationException.CLEANROOM_NOT_COMPATIBLE_WITH_FORGE ->
+                    Controllers.dialog(i18n("install.failed.cleanroom_not_compatible_with_forge"), i18n("install.failed"), MessageDialogPane.MessageType.ERROR, next);
+                case UnsupportedInstallationException.FORGE_1_17_OPTIFINE_H1_PRE2 ->
+                    Controllers.dialog(i18n("install.failed.optifine_forge_1.17"), i18n("install.failed"), MessageDialogPane.MessageType.ERROR, next);
+                default ->
+                    Controllers.dialog(i18n("install.failed.optifine_conflict"), i18n("install.failed"), MessageDialogPane.MessageType.ERROR, next);
+            }
+        } else if (exception instanceof DefaultDependencyManager.UnsupportedLibraryInstallerException) {
+            Controllers.dialog(i18n("install.failed.install_online"), i18n("install.failed"), MessageDialogPane.MessageType.ERROR, next);
+        } else if (exception instanceof ArtifactMalformedException || exception instanceof ZipException) {
+            Controllers.dialog(i18n("install.failed.malformed"), i18n("install.failed"), MessageDialogPane.MessageType.ERROR, next);
+        } else if (exception instanceof GameAssetIndexDownloadTask.GameAssetIndexMalformedException) {
+            Controllers.dialog(i18n("assets.index.malformed"), i18n("install.failed"), MessageDialogPane.MessageType.ERROR, next);
+        } else if (exception instanceof VersionMismatchException e) {
+            Controllers.dialog(i18n("install.failed.version_mismatch", e.getExpect(), e.getActual()), i18n("install.failed"), MessageDialogPane.MessageType.ERROR, next);
+        } else if (exception instanceof CancellationException) {
+            // Ignore cancel
+        } else {
+            Controllers.dialog(StringUtils.getStackTrace(exception), i18n("install.failed"), MessageDialogPane.MessageType.ERROR, next);
         }
     }
 }

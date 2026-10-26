@@ -33,52 +33,33 @@ import javafx.stage.*;
 import javafx.util.Duration;
 import org.jackhuang.hmcl.Launcher;
 import org.jackhuang.hmcl.Metadata;
-import org.jackhuang.hmcl.game.GameInstanceID;
-import org.jackhuang.hmcl.game.HMCLGameRepository;
-import org.jackhuang.hmcl.game.LauncherHelper;
-import org.jackhuang.hmcl.game.ModpackHelper;
-import org.jackhuang.hmcl.java.JavaManager;
 import org.jackhuang.hmcl.java.JavaRuntime;
-import org.jackhuang.hmcl.modpack.Modpack;
 import org.jackhuang.hmcl.setting.*;
 import org.jackhuang.hmcl.task.Schedulers;
 import org.jackhuang.hmcl.task.Task;
 import org.jackhuang.hmcl.task.TaskExecutor;
-import org.jackhuang.hmcl.ui.account.AccountListPage;
 import org.jackhuang.hmcl.ui.animation.ContainerAnimations;
 import org.jackhuang.hmcl.ui.animation.Motion;
 import org.jackhuang.hmcl.ui.construct.*;
 import org.jackhuang.hmcl.ui.construct.MessageDialogPane.MessageType;
 import org.jackhuang.hmcl.ui.decorator.Decorator;
-import org.jackhuang.hmcl.ui.download.DownloadPage;
 import org.jackhuang.hmcl.ui.main.LauncherSettingsPage;
 import org.jackhuang.hmcl.ui.main.RootPage;
-import org.jackhuang.hmcl.ui.instances.GameListPage;
-import org.jackhuang.hmcl.ui.instances.GameInstancePage;
-import org.jackhuang.hmcl.ui.instances.Instances;
-import org.jackhuang.hmcl.upgrade.UpdateChecker;
 import org.jackhuang.hmcl.util.*;
 import org.jackhuang.hmcl.util.i18n.I18n;
-import org.jackhuang.hmcl.util.i18n.SupportedLocale;
-import org.jackhuang.hmcl.util.io.CompressingUtils;
 import org.jackhuang.hmcl.util.io.FileUtils;
 import org.jackhuang.hmcl.util.platform.Architecture;
 import org.jackhuang.hmcl.util.platform.OperatingSystem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.net.URI;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import static org.jackhuang.hmcl.setting.SettingsManager.settings;
-import static org.jackhuang.hmcl.setting.SettingsManager.getAuthlibInjectorServers;
 import static org.jackhuang.hmcl.setting.SettingsManager.state;
 import static org.jackhuang.hmcl.setting.SettingsManager.userState;
 import static org.jackhuang.hmcl.util.i18n.I18n.i18n;
@@ -88,21 +69,10 @@ public final class Controllers {
     public static final String JAVA_VERSION_TIP = "javaVersion";
     public static final String JAVA_INTERPRETED_MODE_TIP = "javaInterpretedMode";
     public static final String SOFTWARE_RENDERING = "softwareRendering";
-    public static final String APRIL_FOOLS = "aprilFools";
 
-    private static GameInstancePage gameInstancePage;
-    private static Lazy<GameListPage> gameListPage = new Lazy<>(GameListPage::new);
     private static Lazy<RootPage> rootPage = new Lazy<>(RootPage::new);
     /// The coordinator for the main window's scene graph and navigation stack.
     private static @Nullable Decorator decorator;
-    private static DownloadPage downloadPage;
-    private static Lazy<AccountListPage> accountListPage = new Lazy<>(() -> {
-        AccountListPage accountListPage = new AccountListPage();
-        accountListPage.selectedAccountProperty().bindBidirectional(Accounts.selectedAccountProperty());
-        accountListPage.accountsProperty().bindContent(Accounts.getAccounts());
-        accountListPage.authServersProperty().bindContentBidirectional(getAuthlibInjectorServers());
-        return accountListPage;
-    });
     private static LauncherSettingsPage settingsPage;
 
     private Controllers() {
@@ -126,27 +96,6 @@ public final class Controllers {
     }
 
     @FXThread
-    public static GameInstancePage getGameInstancePage() {
-        if (gameInstancePage == null) {
-            gameInstancePage = new GameInstancePage();
-        }
-        return gameInstancePage;
-    }
-
-    @FXThread
-    public static void prepareGameInstancePage() {
-        if (gameInstancePage == null) {
-            LOG.info("Prepare the game instance page");
-            gameInstancePage = FXUtils.prepareNode(new GameInstancePage());
-        }
-    }
-
-    @FXThread
-    public static GameListPage getGameListPage() {
-        return gameListPage.get();
-    }
-
-    @FXThread
     public static RootPage getRootPage() {
         return rootPage.get();
     }
@@ -165,19 +114,6 @@ public final class Controllers {
             LOG.info("Prepare the settings page");
             settingsPage = FXUtils.prepareNode(new LauncherSettingsPage());
         }
-    }
-
-    @FXThread
-    public static AccountListPage getAccountListPage() {
-        return accountListPage.get();
-    }
-
-    @FXThread
-    public static DownloadPage getDownloadPage() {
-        if (downloadPage == null) {
-            downloadPage = new DownloadPage();
-        }
-        return downloadPage;
     }
 
     /// Returns the initialized main-window decorator.
@@ -201,7 +137,6 @@ public final class Controllers {
     public static void initialize(Stage stage) {
         LOG.info("Start initializing application");
 
-        LOG.info("April Fools: " + AprilFools.isEnabled());
 
         if (System.getProperty("prism.lcdtext") == null) {
             @Nullable String fontAntiAliasing = SettingsManager.userSettings().fontAntiAliasingProperty().get();
@@ -225,8 +160,6 @@ public final class Controllers {
             settings().commonDirectoryTypeProperty().set(EnumCommonDirectory.DEFAULT);
             dialog(i18n("launcher.cache_directory.invalid"));
         }
-
-        Lang.thread(JavaManager::initialize, "Search Java", true);
 
         StyleSheets.init(mainScene);
 
@@ -312,88 +245,6 @@ public final class Controllers {
             Controllers.dialog(agreementPane);
         }
 
-        aprilFools:
-        if (AprilFools.isEnabled()) {
-            int currentYear = LocalDate.now().getYear();
-            if (state().getShownTips().get(APRIL_FOOLS) instanceof Number year && year.intValue() >= currentYear)
-                break aprilFools;
-
-            if (!I18n.getLocale().getLocale().getLanguage().equals("zh"))
-                break aprilFools;
-
-            SupportedLocale lzh = SupportedLocale.getSupportedLocales().stream()
-                    .filter(locale -> "lzh".equals(locale.getName()))
-                    .findFirst().orElse(null);
-
-            if (lzh == null) {
-                LOG.warning("No supported locale found for lzh");
-                break aprilFools;
-            }
-
-            Runnable updateShowTips = () -> state().getShownTips().put(APRIL_FOOLS, currentYear);
-
-            Controllers.confirmWithCountdown(i18n("launcher.april_fools.switch_lzh"), null, 10,
-                    MessageType.QUESTION, () -> {
-                        Controllers.confirm(i18n("launcher.april_fools.switch_lzh.confirm"), null, MessageType.QUESTION, () -> {
-                            LOG.info("Switching locale to " + lzh);
-
-                            updateShowTips.run();
-                            settings().languageProperty().set(lzh);
-
-                            Controllers.onApplicationStop();
-
-                            try {
-                                FileSaver.waitForAllSaves();
-                            } catch (InterruptedException ignored) {
-                                // Ignore
-                            }
-
-                            try {
-                                Restarter.restartSelf();
-                            } catch (IOException e) {
-                                LOG.warning("Failed to restart self", e);
-                            }
-
-                            Platform.exit();
-                        }, updateShowTips);
-                    }, updateShowTips);
-        }
-
-        tryInstallBundledModpack(GameDirectoryManager.getSelectedRepository());
-    }
-
-    /// Offers automatic install when a package exists under `.hmcl/modpack/`.
-    ///
-    /// Called from [Controllers#initialize] after the UI is ready. Install does not wait for repository
-    /// refresh: instance paths come from the selected repository layout. The package file itself is the
-    /// install signal; it is deleted after a successful install so later startups do not re-prompt.
-    private static void tryInstallBundledModpack(HMCLGameRepository repository) {
-        @Nullable Path modpackFile = Metadata.findBundledModpackFile();
-        if (modpackFile == null) {
-            return;
-        }
-
-        LOG.info("Found bundled modpack at " + modpackFile + "; starting automatic install");
-
-        Controllers.taskDialog(
-                Task.composeAsync(Schedulers.io(), () -> {
-                            Charset encoding = CompressingUtils.findSuitableEncoding(modpackFile);
-                            Modpack modpack = ModpackHelper.readModpackManifest(modpackFile, encoding);
-                            return ModpackHelper.getInstallTask(
-                                    repository, modpackFile, new GameInstanceID(modpack.getName()), modpack, null);
-                        })
-                        .whenComplete(Schedulers.javafx(), (ignored, exception) -> {
-                            if (exception != null) {
-                                LOG.warning("Failed to install bundled modpack", exception);
-                                return;
-                            }
-                            try {
-                                Files.deleteIfExists(modpackFile);
-                            } catch (IOException e) {
-                                LOG.warning("Failed to delete bundled modpack: " + modpackFile, e);
-                            }
-                        }), i18n("modpack.installing"), TaskCancellationAction.NO_CANCEL
-        );
     }
 
     public static void dialog(Region content) {
@@ -569,16 +420,7 @@ public final class Controllers {
     }
 
     public static void onHyperlinkAction(String href) {
-        if (href.startsWith("hmcl://")) {
-            switch (href) {
-                case "hmcl://game/launch":
-                    var repository = GameDirectoryManager.getSelectedRepository();
-                    Instances.launch(repository.getSelectedInstance(), LauncherHelper::setKeep);
-                    break;
-            }
-        } else {
-            FXUtils.openLink(href);
-        }
+        FXUtils.openLink(href);
     }
 
     public static void openUriOrCopy(@Nullable URI uri) {
@@ -607,10 +449,6 @@ public final class Controllers {
     public static void shutdown() {
         onApplicationStop();
         rootPage = null;
-        gameInstancePage = null;
-        gameListPage = null;
-        downloadPage = null;
-        accountListPage = null;
         settingsPage = null;
         decorator = null;
 

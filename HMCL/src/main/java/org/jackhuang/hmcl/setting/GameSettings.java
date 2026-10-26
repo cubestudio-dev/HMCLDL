@@ -27,7 +27,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import org.jackhuang.hmcl.game.*;
-import org.jackhuang.hmcl.java.JavaManager;
 import org.jackhuang.hmcl.java.JavaRuntime;
 import org.jackhuang.hmcl.setting.property.InheritableProperty;
 import org.jackhuang.hmcl.setting.property.SettingProperty;
@@ -926,70 +925,6 @@ public sealed abstract class GameSettings extends ObservableSetting {
         public void setJavaAutoSelected() {
             GameSettings target = instance != null && isOverridden(instance, instance.javaTypeProperty()) ? instance : preset;
             target.javaTypeProperty().setValue(JavaVersionType.AUTO);
-        }
-
-        /// Finds the effective Java runtime.
-        public @Nullable JavaRuntime getJava(@Nullable GameVersionNumber gameVersion, @Nullable GameInstanceManifest manifest) throws InterruptedException {
-            JavaVersionType javaVersionType = getInheritable(GameSettings::javaTypeProperty);
-            switch (javaVersionType) {
-                case AUTO:
-                    return JavaManager.findSuitableJava(gameVersion, manifest);
-                case CUSTOM:
-                    try {
-                        return JavaManager.getJava(Path.of(getInheritable(GameSettings::customJavaPathProperty)));
-                    } catch (IOException | InvalidPathException e) {
-                        return null;
-                    }
-                case VERSION: {
-                    String javaVersion = getInheritable(GameSettings::customJavaVersionProperty);
-                    if (StringUtils.isBlank(javaVersion)) {
-                        return JavaManager.findSuitableJava(gameVersion, manifest);
-                    }
-
-                    int majorVersion = -1;
-                    try {
-                        majorVersion = Integer.parseInt(javaVersion);
-                    } catch (NumberFormatException ignored) {
-                    }
-
-                    if (majorVersion < 0) {
-                        LOG.warning("Invalid Java version: " + javaVersion);
-                        return null;
-                    }
-
-                    final int finalMajorVersion = majorVersion;
-                    Collection<JavaRuntime> allJava = JavaManager.getAllJava().stream()
-                            .filter(it -> it.getParsedVersion() == finalMajorVersion)
-                            .collect(Collectors.toList());
-                    return JavaManager.findSuitableJava(allJava, gameVersion, manifest);
-                }
-                case DETECTED: {
-                    DetectedJava detectedJava = getInheritable(GameSettings::detectedJavaProperty);
-                    String javaVersion = detectedJava.version();
-                    if (StringUtils.isBlank(javaVersion)) {
-                        return JavaManager.findSuitableJava(gameVersion, manifest);
-                    }
-
-                    if (StringUtils.isNotBlank(detectedJava.pathHash())) {
-                        for (JavaRuntime java : JavaManager.getAllJava()) {
-                            if (java.getVersion().equals(javaVersion)
-                                    && detectedJava.pathHash().equals(DetectedJava.hashExistingPath(java.getBinary()))) {
-                                return java;
-                            }
-                        }
-                    }
-
-                    for (JavaRuntime java : JavaManager.getAllJava()) {
-                        if (java.getVersion().equals(javaVersion)) {
-                            return java;
-                        }
-                    }
-
-                    return null;
-                }
-                default:
-                    throw new AssertionError("Java Type: " + javaVersionType);
-            }
         }
 
         /// Returns the effective maximum heap memory in MiB.

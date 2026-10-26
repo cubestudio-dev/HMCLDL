@@ -29,7 +29,6 @@ import org.jackhuang.hmcl.download.forge.ForgeOldInstallTask;
 import org.jackhuang.hmcl.download.game.GameAssetDownloadTask;
 import org.jackhuang.hmcl.download.game.GameInstallTask;
 import org.jackhuang.hmcl.download.game.GameRemoteVersion;
-import org.jackhuang.hmcl.download.java.mojang.MojangJavaDownloadTask;
 import org.jackhuang.hmcl.download.legacyfabric.LegacyFabricInstallTask;
 import org.jackhuang.hmcl.download.liteloader.LiteLoaderInstallTask;
 import org.jackhuang.hmcl.download.neoforge.NeoForgeInstallTask;
@@ -37,22 +36,6 @@ import org.jackhuang.hmcl.download.neoforge.NeoForgeOldInstallTask;
 import org.jackhuang.hmcl.download.optifine.OptiFineInstallTask;
 import org.jackhuang.hmcl.download.quilt.QuiltAPIInstallTask;
 import org.jackhuang.hmcl.download.quilt.QuiltInstallTask;
-import org.jackhuang.hmcl.game.HMCLModpackInstallTask;
-import org.jackhuang.hmcl.java.JavaInstallTask;
-import org.jackhuang.hmcl.modpack.MinecraftInstanceTask;
-import org.jackhuang.hmcl.modpack.ModpackInstallTask;
-import org.jackhuang.hmcl.modpack.ModpackUpdateTask;
-import org.jackhuang.hmcl.modpack.curse.CurseCompletionTask;
-import org.jackhuang.hmcl.modpack.curse.CurseInstallTask;
-import org.jackhuang.hmcl.modpack.mcbbs.McbbsModpackCompletionTask;
-import org.jackhuang.hmcl.modpack.mcbbs.McbbsModpackExportTask;
-import org.jackhuang.hmcl.modpack.modrinth.ModrinthCompletionTask;
-import org.jackhuang.hmcl.modpack.modrinth.ModrinthInstallTask;
-import org.jackhuang.hmcl.modpack.modrinth.ModrinthModpackExportTask;
-import org.jackhuang.hmcl.modpack.multimc.MultiMCModpackInstallTask;
-import org.jackhuang.hmcl.modpack.server.ServerModpackCompletionTask;
-import org.jackhuang.hmcl.modpack.server.ServerModpackExportTask;
-import org.jackhuang.hmcl.modpack.server.ServerModpackLocalInstallTask;
 import org.jackhuang.hmcl.task.Task;
 import org.jackhuang.hmcl.util.StringUtils;
 import org.jackhuang.hmcl.util.i18n.translator.Translator;
@@ -209,30 +192,6 @@ public final class I18n {
             return i18n("install.installer.install", i18n("install.installer.quilt"));
         } else if (task instanceof QuiltAPIInstallTask) {
             return i18n("install.installer.install", i18n("install.installer.quilt-api"));
-        } else if (task instanceof CurseCompletionTask || task instanceof ModrinthCompletionTask || task instanceof ServerModpackCompletionTask || task instanceof McbbsModpackCompletionTask) {
-            return i18n("modpack.completion");
-        } else if (task instanceof ModpackInstallTask) {
-            return i18n("modpack.installing");
-        } else if (task instanceof ModpackUpdateTask) {
-            return i18n("modpack.update");
-        } else if (task instanceof CurseInstallTask) {
-            return i18n("modpack.installing.given", i18n("modpack.type.curse"));
-        } else if (task instanceof MultiMCModpackInstallTask) {
-            return i18n("modpack.installing.given", i18n("modpack.type.multimc"));
-        } else if (task instanceof ModrinthInstallTask) {
-            return i18n("modpack.installing.given", i18n("modpack.type.modrinth"));
-        } else if (task instanceof ServerModpackLocalInstallTask) {
-            return i18n("install.installing") + ": " + i18n("modpack.type.server");
-        } else if (task instanceof HMCLModpackInstallTask) {
-            return i18n("modpack.installing.given", "HMCL");
-        } else if (task instanceof McbbsModpackExportTask || task instanceof ServerModpackExportTask || task instanceof ModrinthModpackExportTask) {
-            return i18n("modpack.export");
-        } else if (task instanceof MinecraftInstanceTask) {
-            return i18n("modpack.scan");
-        } else if (task instanceof MojangJavaDownloadTask) {
-            return i18n("download.java");
-        } else if (task instanceof JavaInstallTask) {
-            return i18n("java.installing");
         }
 
         return null;

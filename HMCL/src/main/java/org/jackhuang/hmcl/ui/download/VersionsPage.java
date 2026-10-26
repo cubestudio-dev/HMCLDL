@@ -60,11 +60,9 @@ import org.jackhuang.hmcl.ui.construct.TwoLineListItem;
 import org.jackhuang.hmcl.ui.wizard.Navigation;
 import org.jackhuang.hmcl.ui.wizard.Refreshable;
 import org.jackhuang.hmcl.ui.wizard.WizardPage;
-import org.jackhuang.hmcl.util.NativePatcher;
 import org.jackhuang.hmcl.util.StringUtils;
 import org.jackhuang.hmcl.util.i18n.I18n;
 import org.jackhuang.hmcl.util.platform.OperatingSystem;
-import org.jackhuang.hmcl.util.platform.Platform;
 import org.jackhuang.hmcl.util.versioning.GameVersionNumber;
 
 import java.util.Locale;
@@ -263,10 +261,6 @@ public final class VersionsPage extends Control implements WizardPage, Refreshab
                     }
                 }
 
-                switch (NativePatcher.checkSupportedStatus(gameVersion, Platform.SYSTEM_PLATFORM, OperatingSystem.SYSTEM_VERSION)) {
-                    case UNTESTED -> twoLineListItem.addTagWarning(i18n("instance.game.support_status.untested"));
-                    case UNSUPPORTED -> twoLineListItem.addTagWarning(i18n("instance.game.support_status.unsupported"));
-                }
             } else {
                 GameInstanceIconType iconType;
                 if (remoteVersion instanceof LiteLoaderRemoteVersion)

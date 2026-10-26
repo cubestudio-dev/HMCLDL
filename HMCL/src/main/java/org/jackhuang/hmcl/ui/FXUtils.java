@@ -1465,12 +1465,6 @@ public final class FXUtils {
         });
     }
 
-    public static TextFlow renderAddonChangelog(String changelogHtml, String baseUri) {
-        var textFlow = new HTMLRenderer(Controllers::openUriOrCopy).appendNode(Jsoup.parse(changelogHtml, baseUri)).mergeLineBreaks().render();
-        textFlow.getStyleClass().add("addon-changelog");
-        return textFlow;
-    }
-
     /// Be cautious when dealing with large amounts of data
     public static <S> TableView<S> newAutoHeightTable(ObservableList<S> items) {
         return new AutoHeightTableView<>(items);

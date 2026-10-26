@@ -20,7 +20,7 @@ package org.jackhuang.hmcl.util;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import org.jackhuang.hmcl.countly.CrashReport;
+import org.jackhuang.hmcl.util.CrashReport;
 import org.jackhuang.hmcl.setting.SettingsManager;
 import org.jackhuang.hmcl.ui.CrashWindow;
 

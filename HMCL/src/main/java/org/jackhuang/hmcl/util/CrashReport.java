@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package org.jackhuang.hmcl.countly;
+package org.jackhuang.hmcl.util;
 
 import org.jackhuang.hmcl.Metadata;
 import org.jackhuang.hmcl.util.StringUtils;
@@ -52,7 +52,7 @@ public class CrashReport {
     }
 
     public String getDisplayText() {
-        return "---- Hello Minecraft! Crash Report ----\n" +
+        return "---- HMCLDL Crash Report ----\n" +
                 "  Version: " + Metadata.VERSION + "\n" +
                 "  Time: " + DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now()) + "\n" +
                 "  Thread: " + thread + "\n" +

@@ -542,23 +542,6 @@ public class HMCLGameInstance extends DefaultGameInstance {
             return;
         }
 
-        @Nullable GameSettingsPresetID legacyParent = getRepository().getGameDirectory().getLegacyGameSettings();
-        if (SettingsManager.getGameSettings(legacyParent) == null) {
-            legacyParent = null;
-        }
-
-        LegacyGameSettingsMigrator.InstanceMigrationResult migrationResult =
-                LegacyGameSettingsMigrator.migrateInstanceGameSettings(
-                        getRepository(), id, legacyParent);
-        if (migrationResult != null) {
-            initSettings(migrationResult.setting(), true);
-            try {
-                saveSettingsSync();
-                migrationResult.saveReceipt();
-            } catch (IOException e) {
-                LOG.warning("Failed to save migrated instance game settings for " + id, e);
-            }
-        }
     }
 
     private Path getGameSettingsFile() {
@@ -631,18 +614,6 @@ public class HMCLGameInstance extends DefaultGameInstance {
         QuickPlayOption quickPlayOption = vs.getQuickPlayOption();
         if (quickPlayOption != null) {
             builder.setQuickPlayOption(quickPlayOption);
-        }
-
-        Path json = getModpackConfigurationFile();
-        if (Files.exists(json)) {
-            try {
-                String jsonText = Files.readString(json);
-                ModpackConfiguration<?> modpackConfiguration = JsonUtils.GSON.fromJson(jsonText, ModpackConfiguration.class);
-                ModpackProvider provider = ModpackHelper.getProviderByType(modpackConfiguration.getType());
-                if (provider != null) provider.injectLaunchOptions(jsonText, builder);
-            } catch (IOException | JsonParseException e) {
-                LOG.warning("Failed to parse modpack configuration file " + json, e);
-            }
         }
 
         if (autoMemory && builder.getJavaArguments().stream().anyMatch(it -> it.startsWith("-Xmx")))
