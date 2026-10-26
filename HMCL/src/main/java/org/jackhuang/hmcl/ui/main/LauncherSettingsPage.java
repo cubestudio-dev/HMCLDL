@@ -35,8 +35,8 @@ import static org.jackhuang.hmcl.util.i18n.I18n.i18n;
 public class LauncherSettingsPage extends DecoratorAnimatedPage implements DecoratorPage, PageAware {
     private final ReadOnlyObjectWrapper<State> state = new ReadOnlyObjectWrapper<>(State.fromTitle(i18n("settings")));
     private final TabHeader tab;
-    private final TabHeader.Tab<DownloadSettingsPage> downloadTab = new TabHeader.Tab<>("downloaderSettingsPage");
-    private final TabHeader.Tab<AboutPage> aboutTab = new TabHeader.Tab<>("aboutPage");
+    private final TabHeader.Tab<DownloadSettingsPage> downloadTab = new TabHeader.Tab<>("downloaderSettingsPage", i18n("settings.downloader"));
+    private final TabHeader.Tab<AboutPage> aboutTab = new TabHeader.Tab<>("aboutPage", i18n("about"));
     private final TransitionPane transitionPane = new TransitionPane();
 
     public LauncherSettingsPage() {
