@@ -107,7 +107,7 @@ public final class FontManager {
         if (fontFamily == null)
             fontFamily = System.getProperty("hmcl.font.override");
         if (fontFamily == null)
-            fontFamily = System.getenv("HMCL_FONT");
+            fontFamily = System.getenv("HMCLDL_FONT");
 
         if (fontFamily == null) {
             Font defaultFont = DEFAULT_FONT.get();

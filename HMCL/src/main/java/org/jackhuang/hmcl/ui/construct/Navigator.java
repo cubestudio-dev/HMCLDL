@@ -81,7 +81,7 @@ public class Navigator extends TransitionPane {
         fireEvent(navigating);
         node.fireEvent(navigating);
 
-        node.getProperties().put("hmcl.navigator.animation", animationProducer);
+        node.getProperties().put("hmcldl.navigator.animation", animationProducer);
         setContent(node, animationProducer, duration, interpolator);
 
         NavigationEvent navigated = new NavigationEvent(this, node, Navigation.NavigationDirection.NEXT, NavigationEvent.NAVIGATED);
@@ -129,7 +129,7 @@ public class Navigator extends TransitionPane {
         fireEvent(navigating);
         node.fireEvent(navigating);
 
-        Object obj = from.getProperties().get("hmcl.navigator.animation");
+        Object obj = from.getProperties().get("hmcldl.navigator.animation");
         if (obj instanceof AnimationProducer animationProducer) {
             setContent(node, Objects.requireNonNullElse(animationProducer.opposite(), animationProducer));
         } else {

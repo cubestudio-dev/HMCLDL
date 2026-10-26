@@ -45,7 +45,7 @@ public final class EntryPoint {
     public static void main(String[] args) {
         System.getProperties().putIfAbsent("java.net.useSystemProxies", "true");
         System.getProperties().putIfAbsent("javafx.autoproxy.disable", "true");
-        System.getProperties().putIfAbsent("http.agent", "HMCL/" + Metadata.VERSION);
+        System.getProperties().putIfAbsent("http.agent", "HMCLDL/" + Metadata.VERSION);
 
         createHMCLDirectories();
         LOG.start(Metadata.HMCL_LOCAL_HOME.resolve("logs"));
@@ -158,7 +158,7 @@ public final class EntryPoint {
 
     private static void checkWine() {
         if (OperatingSystem.isRunningUnderWine()) {
-            LOG.warning("HMCL is running under Wine or its distributions!");
+            LOG.warning("HMCLDL is running under Wine or its distributions!");
             showWarning(i18n("fatal.wine_warning"));
         }
     }

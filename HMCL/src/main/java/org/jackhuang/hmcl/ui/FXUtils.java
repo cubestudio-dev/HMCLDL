@@ -494,7 +494,7 @@ public final class FXUtils {
     }
 
     public static void playAnimation(Node node, String animationKey, Animation animation) {
-        animationKey = "hmcl.animations." + animationKey;
+        animationKey = "hmcldl.animations." + animationKey;
         if (node.getProperties().get(animationKey) instanceof Animation oldAnimation)
             oldAnimation.stop();
         animation.play();

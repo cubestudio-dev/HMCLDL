@@ -119,7 +119,7 @@ public final class ImageUtils {
     };
 
     public static final ImageLoader APNG = (input, requestedWidth, requestedHeight, preserveRatio, smooth) -> {
-        if (!"true".equals(System.getProperty("hmcl.experimental.apng", "true")))
+        if (!"true".equals(System.getProperty("hmcldl.experimental.apng", "true")))
             return DEFAULT.load(input, requestedWidth, requestedHeight, preserveRatio, smooth);
 
         try {

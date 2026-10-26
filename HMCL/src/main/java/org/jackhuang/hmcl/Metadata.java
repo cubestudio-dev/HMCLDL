@@ -23,9 +23,7 @@ import org.jackhuang.hmcl.util.platform.Architecture;
 import org.jackhuang.hmcl.util.platform.OperatingSystem;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.EnumSet;
 
 /**
  * Stores metadata about this application.
@@ -36,10 +34,10 @@ public final class Metadata {
 
     public static final String NAME = "HMCLDL";
     public static final String FULL_NAME = "Hello Minecraft! Launcher Download Launcher";
-    public static final String VERSION = System.getProperty("hmcl.version.override", JarUtils.getAttribute("hmcl.version", "@develop@"));
+    public static final String VERSION = System.getProperty("hmcldl.version.override", JarUtils.getAttribute("hmcl.version", "@develop@"));
 
     /// Explicit Application User Model ID used for Windows taskbar grouping and pinning.
-    public static final String WINDOWS_APP_USER_MODEL_ID = "org.jackhuang.hmcl";
+    public static final String WINDOWS_APP_USER_MODEL_ID = "cubestudio-dev.HMCLDL";
 
     public static final String TITLE = NAME + " " + VERSION;
     public static final String FULL_TITLE = FULL_NAME + " v" + VERSION;
@@ -49,15 +47,8 @@ public final class Metadata {
     public static final int RECOMMENDED_JAVA_VERSION = 21;
 
     public static final String PUBLISH_URL = "https://github.com/cubestudio-dev/HMCLDL";
-    public static final String DOWNLOAD_URL = PUBLISH_URL + "/releases";
-    public static final String HMCL_UPDATE_URL = System.getProperty("hmcl.update_source.override", PUBLISH_URL + "/api/update_link");
-    public static final String MANUAL_UPDATE_URL = "https://github.com/cubestudio-dev/HMCLDL/releases";
-
-    public static final String DOCS_URL = "https://github.com/cubestudio-dev/HMCLDL";
     public static final String CONTACT_URL = PUBLISH_URL;
-    public static final String CHANGELOG_URL = PUBLISH_URL + "/releases";
-    public static final String EULA_URL = "https://docs.hmcl.net/eula/hmcl.html";
-    public static final String GROUPS_URL = "https://github.com/cubestudio-dev/HMCLDL";
+    public static final String EULA_URL = "https://github.com/cubestudio-dev/HMCLDL/blob/main/LICENSE";
 
     public static final String BUILD_CHANNEL = JarUtils.getAttribute("hmcl.version.type", "nightly");
     public static final String GITHUB_SHA = JarUtils.getAttribute("hmcl.version.hash", null);
@@ -69,7 +60,7 @@ public final class Metadata {
     public static final Path DEPENDENCIES_DIRECTORY;
 
     static {
-        String hmclHome = System.getProperty("hmcl.home", System.getenv("HMCL_USER_HOME"));
+        String hmclHome = System.getProperty("hmcldl.home", System.getenv("HMCLDL_USER_HOME"));
         if (StringUtils.isBlank(hmclHome)) {
             if (OperatingSystem.CURRENT_OS.isLinuxOrBSD()) {
                 String xdgData = System.getenv("XDG_DATA_HOME");
@@ -85,12 +76,12 @@ public final class Metadata {
             HMCL_USER_HOME = Path.of(hmclHome).toAbsolutePath().normalize();
         }
 
-        String hmclCurrentDir = System.getProperty("hmcl.dir", System.getenv("HMCL_LOCAL_HOME"));
+        String hmclCurrentDir = System.getProperty("hmcldl.dir", System.getenv("HMCLDL_LOCAL_HOME"));
         HMCL_LOCAL_HOME = StringUtils.isNotBlank(hmclCurrentDir)
                 ? Path.of(hmclCurrentDir).toAbsolutePath().normalize()
                 : CURRENT_DIRECTORY.resolve(".hmcldl");
 
-        String hmclDependencies = System.getProperty("hmcl.dependencies.dir", System.getenv("HMCL_DEPENDENCIES_DIR"));
+        String hmclDependencies = System.getProperty("hmcldl.dependencies.dir", System.getenv("HMCLDL_DEPENDENCIES_DIR"));
         DEPENDENCIES_DIRECTORY = StringUtils.isNotBlank(hmclDependencies)
                 ? Path.of(hmclDependencies).toAbsolutePath().normalize()
                 : HMCL_LOCAL_HOME.resolve("dependencies");
@@ -111,55 +102,8 @@ public final class Metadata {
     public static @Nullable String getSuggestedJavaDownloadLink() {
         if (OperatingSystem.CURRENT_OS == OperatingSystem.LINUX && Architecture.SYSTEM_ARCH == Architecture.LOONGARCH64_OW)
             return "https://www.loongnix.cn/zh/api/java/downloads-jdk21/index.html";
-        else {
-            EnumSet<Architecture> supportedArchitectures;
-            if (OperatingSystem.CURRENT_OS == OperatingSystem.WINDOWS)
-                supportedArchitectures = EnumSet.of(Architecture.X86_64, Architecture.X86, Architecture.ARM64);
-            else if (OperatingSystem.CURRENT_OS == OperatingSystem.LINUX)
-                supportedArchitectures = EnumSet.of(
-                        Architecture.X86_64, Architecture.X86,
-                        Architecture.ARM64, Architecture.ARM32,
-                        Architecture.RISCV64, Architecture.LOONGARCH64
-                );
-            else if (OperatingSystem.CURRENT_OS == OperatingSystem.MACOS)
-                supportedArchitectures = EnumSet.of(Architecture.X86_64, Architecture.ARM64);
-            else
-                supportedArchitectures = EnumSet.noneOf(Architecture.class);
-            if (supportedArchitectures.contains(Architecture.SYSTEM_ARCH))
-                return String.format("https://docs.hmcl.net/downloads/%s/%s.html",
-                        OperatingSystem.CURRENT_OS.getCheckedName(),
-                        Architecture.SYSTEM_ARCH.getCheckedName()
-                );
-            else
-                return null;
-        }
-    }
-
-    /// Directory under [HMCL_LOCAL_HOME] that holds a launcher-bundled modpack for automatic install.
-    public static final String BUNDLED_MODPACK_DIRECTORY_NAME = "modpack";
-
-    /// Returns the directory for a launcher-bundled modpack (`[HMCL_LOCAL_HOME]/modpack`).
-    public static Path getBundledModpackDirectory() {
-        return HMCL_LOCAL_HOME.resolve(BUNDLED_MODPACK_DIRECTORY_NAME);
-    }
-
-    /// Returns the bundled modpack package under [getBundledModpackDirectory], if present.
-    ///
-    /// Prefers `modpack.zip` over `modpack.mrpack` when both exist. Presence of the package is the
-    /// signal to offer automatic install; the file is removed after a successful install.
-    ///
-    /// @return the modpack path, or `null` when no package is present
-    public static @Nullable Path findBundledModpackFile() {
-        Path directory = getBundledModpackDirectory();
-        Path zipModpack = directory.resolve("modpack.zip");
-        if (Files.isRegularFile(zipModpack)) {
-            return zipModpack;
-        }
-        Path mrpackModpack = directory.resolve("modpack.mrpack");
-        if (Files.isRegularFile(mrpackModpack)) {
-            return mrpackModpack;
-        }
-        return null;
+        else
+            return PUBLISH_URL + "/releases";
     }
 
 }

@@ -93,7 +93,7 @@ public final class SupportedLocale {
         this.isDefault = true;
         this.name = "default";
 
-        String language = System.getenv("HMCL_LANGUAGE");
+        String language = System.getenv("HMCLDL_LANGUAGE");
         if (StringUtils.isBlank(language)) {
             this.locale = LocaleUtils.SYSTEM_DEFAULT;
             this.displayLocale = isExperimentalSupported(this.locale)
