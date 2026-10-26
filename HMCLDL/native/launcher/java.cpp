@@ -27,8 +27,13 @@ bool FindJavaByRegistryKey(HKEY rootKey, LPCWSTR subKey, std::wstring& path) {
   HKEY hKey;
   if (ERROR_SUCCESS !=
       (result =
-           RegOpenKeyEx(rootKey, subKey, 0, KEY_WOW64_64KEY | KEY_READ, &hKey)))
-    return false;
+           RegOpenKeyEx(rootKey, subKey, 0, KEY_WOW64_64KEY | KEY_READ, &hKey))) {
+    // Fall back to the 32-bit registry view.
+    if (ERROR_SUCCESS !=
+        (result =
+             RegOpenKeyEx(rootKey, subKey, 0, KEY_WOW64_32KEY | KEY_READ, &hKey)))
+      return false;
+  }
 
   RegQueryInfoKey(hKey,             // key handle
                   NULL,             // buffer for class name
@@ -75,7 +80,11 @@ bool FindJavaInRegistry(std::wstring& path) {
   return FindJavaByRegistryKey(HKEY_LOCAL_MACHINE, JDK_NEW, path) ||
          FindJavaByRegistryKey(HKEY_LOCAL_MACHINE, JRE_NEW, path) ||
          FindJavaByRegistryKey(HKEY_LOCAL_MACHINE, JDK_OLD, path) ||
-         FindJavaByRegistryKey(HKEY_LOCAL_MACHINE, JRE_OLD, path);
+         FindJavaByRegistryKey(HKEY_LOCAL_MACHINE, JRE_OLD, path) ||
+         FindJavaByRegistryKey(HKEY_CURRENT_USER, JDK_NEW, path) ||
+         FindJavaByRegistryKey(HKEY_CURRENT_USER, JRE_NEW, path) ||
+         FindJavaByRegistryKey(HKEY_CURRENT_USER, JDK_OLD, path) ||
+         FindJavaByRegistryKey(HKEY_CURRENT_USER, JRE_OLD, path);
 }
 
 bool FindJava(std::wstring& path) {

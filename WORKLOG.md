@@ -246,3 +246,20 @@ Stage Summary:
 - 全部 4 项用户需求完成：Win 图标（窗口/exe/任务栏）已换用户 LOGO；无用源码已删；除署名外 HMCL 引用与链接清零；UI 已改（无侧栏、下载为默认主页、设置页标题栏返回）
 - v1.1 产物发布于 /home/z/my-project/download/（jar/exe/sh/deb + sha256）
 - 遗留提醒：exe 内 Java 下载指引指向 github.com/cubestudio-dev/HMCLDL/releases/tag/v1.1，用户发布时需创建该 tag
+---
+Task ID: 6
+Agent: main (Z.ai Code)
+Task: 使用用户 PAT 推送仓库至 GitHub 并发布 v1.1 Release（含工作日志固化）
+
+Work Log:
+- 用 PAT 验证身份（cubestudio-dev）与仓库 cubestudio-dev/HMCLDL（public，默认分支 main）
+- 将 /home/z/my-project/worklog.md 固化为仓库内 WORKLOG.md 并提交（ac4173e "docs: add project worklog ..."）——共 13 个本地提交全部推送至 origin/main（网络多次重试后成功，已验证 ls-remote 指向 ac4173e）
+- 创建 tag v1.1（指向 ac4173e）并推送成功
+- 通过 API 创建 GitHub Release "HMCLDL 1.1"（id 424452118，含变更说明与下载表格）
+- 上传 8 个资产全部 201 OK：HMCLDL-1.1.{jar,exe,sh,deb} + 各自 .sha256，state=uploaded
+- 安全收尾：git remote URL 已还原为不含 PAT 的 https://github.com/cubestudio-dev/HMCLDL.git
+
+Stage Summary:
+- 仓库：https://github.com/cubestudio-dev/HMCLDL（main = ac4173e，含 WORKLOG.md）
+- Release：https://github.com/cubestudio-dev/HMCLDL/releases/tag/v1.1（exe 内置下载指引链接现已真实存在）
+- PAT 仅用于本次推送/发布，未写入任何持久化文件；建议用户尽快撤销该 token（已在聊天中暴露）

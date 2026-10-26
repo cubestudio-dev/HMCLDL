@@ -4,6 +4,7 @@
 #include "java.h"
 #include "lang.h"
 #include <windows.h>
+#include <wctype.h>
 
 // HMCLDL (JavaFX build) requires Java 17 or later to run.
 Version J17(TEXT("17"));
@@ -51,6 +52,38 @@ void FindJavaInDirAndLaunchJVM(const std::wstring &baseDir, const std::wstring &
   }
 }
 
+// Scan every directory listed in PATH for java.exe / javaw.exe.
+void FindJavaInPathAndLaunchJVM(const std::wstring &workdir,
+                                const std::wstring &jarPath, const std::wstring &jvmOptions) {
+  std::wstring pathEnv;
+  if (ERROR_SUCCESS != MyGetEnvironmentVariable(L"PATH", pathEnv)) return;
+
+  size_t start = 0;
+  while (start <= pathEnv.size()) {
+    size_t end = pathEnv.find(L';', start);
+    if (end == std::wstring::npos) end = pathEnv.size();
+    std::wstring dir = pathEnv.substr(start, end - start);
+    start = end + 1;
+
+    // Trim quotes and surrounding whitespace.
+    if (!dir.empty() && dir.front() == L'"' && dir.back() == L'"')
+      dir = dir.substr(1, dir.size() - 2);
+    while (!dir.empty() && iswspace(dir.front())) dir.erase(dir.begin());
+    while (!dir.empty() && iswspace(dir.back())) dir.pop_back();
+    if (dir.empty()) continue;
+
+    if (dir.back() != L'\\' && dir.back() != L'/') dir += L'\\';
+
+    static const LPCWSTR exeNames[] = {L"javaw.exe", L"java.exe"};
+    for (LPCWSTR exeName : exeNames) {
+      std::wstring javaPath = dir + exeName;
+      if (FindFirstFileExists(javaPath.c_str(), 0)) {
+        LaunchJVM(javaPath, workdir, jarPath, jvmOptions);
+      }
+    }
+  }
+}
+
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                       LPWSTR lpCmdLine, int nCmdShow) {
   std::wstring path, exeName, jvmOptions;
@@ -88,6 +121,9 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   if (FindJava(path)) LaunchJVM(path + L"\\bin\\javaw.exe", workdir, exeName, jvmOptions);
 
+  // Or we try to search Java in PATH (each entry, java.exe and javaw.exe)
+  FindJavaInPathAndLaunchJVM(workdir, exeName, jvmOptions);
+
   std::wstring programFiles;
 
   // Or we try to search Java in C:\Program Files
@@ -110,29 +146,52 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     FindJavaInDirAndLaunchJVM(dir, workdir, exeName, jvmOptions);
   }
 
-  // Try java in PATH
-  RawLaunchJVM(L"javaw", workdir, exeName, jvmOptions);
-
-  std::wstring hmcldlJavaDir;
+  // Consider ProgramW6432 (Program Files seen from a 32-bit process)
   {
-    std::wstring buffer;
-    if (SUCCEEDED(MySHGetFolderPath(CSIDL_APPDATA, buffer)) || SUCCEEDED(MySHGetFolderPath(CSIDL_PROFILE, buffer))) {
-      MyPathAppend(buffer, L".hmcldl");
-      MyPathAppend(buffer, L"java");
-      if (isARM64) {
-        MyPathAppend(buffer, L"windows-arm64");
-      } else if (isX64) {
-        MyPathAppend(buffer, L"windows-x86_64");
-      } else {
-        MyPathAppend(buffer, L"windows-x86");
+    std::wstring programW6432;
+    if (ERROR_SUCCESS == MyGetEnvironmentVariable(L"ProgramW6432", programW6432) && !programW6432.empty()) {
+      if (programW6432.back() != L'\\') programW6432 += L'\\';
+      if (_wcsicmp(programW6432.c_str(), programFiles.c_str()) != 0) {
+        for (LPCWSTR vendorDir : VENDOR_DIRS) {
+          std::wstring dir = programW6432;
+          MyPathAppend(dir, vendorDir);
+          MyPathAddBackslash(dir);
+
+          FindJavaInDirAndLaunchJVM(dir, workdir, exeName, jvmOptions);
+        }
       }
-      MyPathAddBackslash(buffer);
-      hmcldlJavaDir = buffer;
     }
   }
 
-  if (!hmcldlJavaDir.empty()) {
-    FindJavaInDirAndLaunchJVM(hmcldlJavaDir, workdir, exeName, jvmOptions);
+  // Try java in PATH directly (rely on CreateProcess PATH lookup)
+  RawLaunchJVM(L"javaw", workdir, exeName, jvmOptions);
+  RawLaunchJVM(L"java", workdir, exeName, jvmOptions);
+
+  // HMCLDL-managed Java runtimes (and the legacy HMCLDL 1.0 location).
+  std::wstring javaRoot;
+  {
+    std::wstring buffer;
+    if (SUCCEEDED(MySHGetFolderPath(CSIDL_APPDATA, buffer)) || SUCCEEDED(MySHGetFolderPath(CSIDL_PROFILE, buffer))) {
+      javaRoot = buffer;
+    }
+  }
+
+  LPCWSTR javaRootNames[] = {L".hmcldl", L".hmcl"};
+  for (LPCWSTR javaRootName : javaRootNames) {
+    std::wstring buffer = javaRoot;
+    if (buffer.empty()) continue;
+    MyPathAppend(buffer, javaRootName);
+    MyPathAppend(buffer, L"java");
+    if (isARM64) {
+      MyPathAppend(buffer, L"windows-arm64");
+    } else if (isX64) {
+      MyPathAppend(buffer, L"windows-x86_64");
+    } else {
+      MyPathAppend(buffer, L"windows-x86");
+    }
+    MyPathAddBackslash(buffer);
+
+    FindJavaInDirAndLaunchJVM(buffer, workdir, exeName, jvmOptions);
   }
 
   // Java download guidance page: point users to the HMCLDL release notes.
