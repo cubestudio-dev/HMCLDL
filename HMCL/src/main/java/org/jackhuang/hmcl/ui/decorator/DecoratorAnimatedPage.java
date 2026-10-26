@@ -62,8 +62,9 @@ public class DecoratorAnimatedPage extends Control {
             super(control);
 
             BorderPane pane = new BorderPane();
+            // The left column is only used by pages that add a side menu themselves;
+            // an empty one collapses to zero width so the center gets the full window.
             pane.setLeft(control.left);
-            FXUtils.setLimitWidth(control.left, 200);
             pane.setCenter(control.center);
             getChildren().setAll(pane);
         }

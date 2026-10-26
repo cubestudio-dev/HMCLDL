@@ -42,8 +42,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.glavo.monetfx.ColorRole;
 import org.glavo.monetfx.ColorScheme;
-import org.jackhuang.hmcl.Metadata;
 import org.jackhuang.hmcl.theme.Themes;
+import org.jackhuang.hmcl.ui.Controllers;
 import org.jackhuang.hmcl.ui.FXUtils;
 import org.jackhuang.hmcl.ui.SVG;
 import org.jackhuang.hmcl.ui.WeakListenerHolder;
@@ -74,6 +74,9 @@ final class MainWindowPane extends StackPane {
 
     /// The transition container used when the title-bar state changes.
     private final TransitionPane navBarPane;
+
+    /// The title-bar gear that opens the settings page.
+    private final JFXButton settingsButton;
 
     /// Retains listener delegates that are registered through weak listener wrappers.
     @SuppressWarnings("FieldCanBeLocal")
@@ -113,6 +116,9 @@ final class MainWindowPane extends StackPane {
         frame.setCenter(center);
 
         HBox rightButtonsContainer = createWindowButtons();
+        settingsButton = createSettingsButton();
+        rightButtonsContainer.getChildren().add(0, settingsButton);
+
         titleBar = new BorderPane();
         titleBar.setPickOnBounds(false);
         titleBar.getStyleClass().add("jfx-tool-bar");
@@ -130,6 +136,16 @@ final class MainWindowPane extends StackPane {
         InvalidationListener navBarListener = observable -> updateNavBar();
         decorator.stateProperty().addListener(holder.weak(navBarListener));
         updateNavBar();
+
+        // The settings gear only shows on the root (download) page;
+        // the settings page itself is left with the back button.
+        InvalidationListener settingsListener = observable -> {
+            DecoratorPage.@Nullable State state = decorator.getState();
+            settingsButton.setVisible(state == null || !state.backable());
+            settingsButton.setManaged(state == null || !state.backable());
+        };
+        decorator.stateProperty().addListener(holder.weak(settingsListener));
+        settingsListener.invalidated(decorator.stateProperty());
 
         decorator.capableDraggingWindow(titleBar);
 
@@ -165,20 +181,13 @@ final class MainWindowPane extends StackPane {
         return backgroundNode;
     }
 
-    /// Creates the help, minimize, and application-close buttons.
+    /// Creates the minimize and application-close buttons.
     ///
     /// @return a size-limited top-right button row
     private HBox createWindowButtons() {
         HBox buttons = new HBox();
         buttons.setAlignment(Pos.TOP_RIGHT);
         buttons.setMaxSize(Region.USE_PREF_SIZE, 40);
-
-        JFXButton helpButton = new JFXButton();
-        helpButton.setFocusTraversable(false);
-        helpButton.setGraphic(SVG.HELP.createIcon(Themes.titleFillProperty()));
-        helpButton.getStyleClass().add("jfx-decorator-button");
-        helpButton.setOnAction(event -> FXUtils.openLink(Metadata.CONTACT_URL));
-        decorator.forbidDraggingWindow(helpButton);
 
         JFXButton minimizeButton = new JFXButton();
         minimizeButton.setFocusTraversable(false);
@@ -194,8 +203,21 @@ final class MainWindowPane extends StackPane {
         closeButton.setOnAction(event -> decorator.closeWindow());
         decorator.forbidDraggingWindow(closeButton);
 
-        buttons.getChildren().setAll(helpButton, minimizeButton, closeButton);
+        buttons.getChildren().setAll(minimizeButton, closeButton);
         return buttons;
+    }
+
+    /// Creates the title-bar gear button that opens the settings page.
+    ///
+    /// @return the settings button
+    private JFXButton createSettingsButton() {
+        JFXButton button = new JFXButton();
+        button.setFocusTraversable(false);
+        button.setGraphic(SVG.SETTINGS.createIcon(Themes.titleFillProperty()));
+        button.getStyleClass().add("jfx-decorator-button");
+        button.setOnAction(event -> Controllers.navigate(Controllers.getSettingsPage()));
+        decorator.forbidDraggingWindow(button);
+        return button;
     }
 
     /// Recomputes the title-bar background for the current theme and transparency preference.
